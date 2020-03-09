@@ -1,0 +1,43 @@
+{
+  "name": "connect-four-client",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@material-ui/core": "^4.6.1",
+    "@material-ui/icons": "^4.5.1",
+    "alphabeta": "^1.0.2",
+    "gsap": "^3.0.1",
+    "ramda": "^0.26.1",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "react-notification-system": "^0.3.0",
+    "react-notification-system-redux": "^2.0.0",
+    "react-redux": "^7.1.3",
+    "react-scripts": "^3.4.0",
+    "redux": "^4.0.4",
+    "redux-actions": "^2.6.5",
+    "redux-modal": "^4.0.0",
+    "redux-saga": "^1.1.3",
+    "reselect": "^4.0.0",
+    "socket.io-client": "^2.3.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "proxy": "http://localhost:5000",
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
