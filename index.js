@@ -4,19 +4,15 @@ const http = require('http')
 const server = http.Server(app)
 const socketio = require('socket.io')
 const io = socketio(server)
-const path = require('path')
 
-app.use(express.static(path.join(__dirname, 'client/build')));
+app.use(express.static(__dirname + '/client/build'))
 
-app.get('/*', function (req, res) {
-  res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'))
+app.get('*', function (req, res) {
+  res.sendFile(__dirname + '/client/build/index.html')
 })
 
 const PORT = process.env.PORT || 5000
-
-server.listen(PORT, () => {
-  console.log("Listening on port: " + PORT)
-})
+server.listen(PORT)
 
 /* 
   Socket
