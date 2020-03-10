@@ -2,11 +2,11 @@
   "name": "connect-four",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js",
-    "server": "nodemon index.js",
+    "start": "node app.js",
+    "server": "nodemon app.js",
     "client": "cd client && npm run start"
   },
   "author": "Christopher Vouga",
