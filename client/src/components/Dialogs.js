@@ -48,6 +48,7 @@ const JoinRoomDialog = connectModal({name: 'joinRoom'})(props => {
         <FormControl>
           <TextField 
             type="number"
+            inputMode='numeric'
             error={not(isNil(error))}
             helperText={prop('reason', error)}
             placeholder={"What's the game #?"}

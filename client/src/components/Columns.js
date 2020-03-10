@@ -47,8 +47,7 @@ const Column = (props) => {
       y={0}
       width={1}
       height={ROW_COUNT}
-      mask="url(#hole-mask)"
-      fill="url(#column)"
+      fill="transparent"
       className={classes.column}
       />
   )
@@ -74,6 +73,15 @@ const Columns = () => {
         <Column  key={columnIndex} columnIndex={columnIndex} />, 
         COLUMN_COUNT
       )}
+      <rect 
+        x={0} 
+        y={0} 
+        pointerEvents="none"
+        width={COLUMN_COUNT} 
+        height={ROW_COUNT} 
+        mask="url(#hole-mask)"
+        fill="url(#column)"
+        />
     </React.Fragment>
   )
 }
