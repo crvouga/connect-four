@@ -45,6 +45,7 @@ const theme = createMuiTheme({
 const useStyles = makeStyles(theme => ({
   root: {
     userSelect: 'none',
+    padding: 0,
   },
 }))
 
