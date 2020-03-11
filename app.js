@@ -12,11 +12,17 @@ app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "client", "build", "index.html"));
 })
 
-
-const PORT = process.env.PORT || 5000
+const PORT = process.env.PORT || 8080
 server.listen(PORT, () => {
-  console.log("Server listening on port", PORT)
+  require('localtunnel')({ port: PORT })
+    .then(tunnel => {
+      console.log(tunnel.url)
+    })
+  console.log("Listening on port", PORT)
 })
+
+
+
 
 /* 
   Socket

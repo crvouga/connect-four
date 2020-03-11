@@ -11,7 +11,6 @@ import actions from '../actions'
 import {
   not
 } from 'ramda'
-import { Typography } from '@material-ui/core';
 import { 
   Player
 } from '../constants';

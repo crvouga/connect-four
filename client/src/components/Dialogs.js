@@ -24,17 +24,14 @@ import ComputerIcon from '@material-ui/icons/Computer'
 import PersonIcon from '@material-ui/icons/Person'
 import PublicIcon from '@material-ui/icons/Public'
 import BackspaceIcon from '@material-ui/icons/Backspace'
+import Box from '@material-ui/core/Box'
+import Divider from '@material-ui/core/Divider'
 import {
-  pipe,
-  replace,
-  take,
   not,
   isNil,
   prop,
   drop,
   dropLast,
-  defaultTo,
-  toString,
 } from 'ramda'
 import { 
   connectModal,
@@ -46,7 +43,6 @@ import actions from '../actions'
 import {
   PlayerType
 } from '../constants'
-import { Box, ButtonGroup, Divider, Typography } from '@material-ui/core';
 import Slide from '@material-ui/core/Slide';
 import makeStyles from '@material-ui/core/styles/makeStyles'
 
@@ -268,14 +264,14 @@ const MenuDialog = connectModal({name: 'menu', destroyOnHide: false})(props => {
           <ListItemText primary="Play against a friend"/>
         </ListSubheader>
 
-        <ListItem button disabled={false} onClick={handleStartRoom}>
+        <ListItem button disabled={isSocketNotConnected} onClick={handleStartRoom}>
           <ListItemIcon>
             <PublicIcon fontSize="small" />
           </ListItemIcon>
           <ListItemText primary="Start Game"/>
         </ListItem>
 
-        <ListItem button disabled={false} onClick={handelJoinRoom}>
+        <ListItem button disabled={isSocketNotConnected} onClick={handelJoinRoom}>
           <ListItemIcon>
             <PublicIcon fontSize="small" />
           </ListItemIcon>          

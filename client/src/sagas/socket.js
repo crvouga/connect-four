@@ -168,7 +168,7 @@ function* readSocketSaga(socket) {
 }
 
 function* socketSaga() {
-  const socket = io('http://localhost:5000/')
+  const socket = io('')
   yield* readSocketSaga(socket)
   yield* notificationsSaga()
   yield* joinRoomSaga(socket)

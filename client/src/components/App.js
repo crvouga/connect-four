@@ -8,7 +8,6 @@ import {
 import CssBaseline from '@material-ui/core/CssBaseline'
 import Container from '@material-ui/core/Container'
 import createMuiTheme from '@material-ui/core/styles/createMuiTheme'
-import Link from '@material-ui/core/Link'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import {
   ThemeProvider
@@ -18,7 +17,6 @@ import yellow from '@material-ui/core/colors/yellow'
 import blue from '@material-ui/core/colors/blue'
 import IconButton from '@material-ui/core/IconButton'
 import MenuIcon from '@material-ui/icons/Menu'
-import GitHubIcon from '@material-ui/icons/GitHub'
 import {
   not
 } from 'ramda'
