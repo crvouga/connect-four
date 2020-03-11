@@ -1,36 +1,32 @@
 
 import AlphaBetaConstructor from 'alphabeta'
 import { 
-  takeLeading, 
+  race,
+  take,
   select, 
   call, 
   put, 
   delay 
 } from "@redux-saga/core/effects";
 import { 
-  ROW_COUNT, 
   PlayerType,
-  WIN_COUNT, 
 } from "../constants";
 import * as selectors from "../selectors";
 import actions from "../actions";
 import { 
   prop,
+  path,
 } from 'ramda'
 
 const scoreFunction = (state, callback) => {
   let score = 0
   for(const consecutive of selectors.consecutives(state)) {
-    const [i, j] = consecutive[0]
-    const player = state.columns[i][j]
+    const player = path(consecutive[0], state.columns)
     if(player === state.current) {
-      if(consecutive.length >= WIN_COUNT) {
-        return callback(Infinity)
-      }
-      score += consecutive.length ** consecutive.length
+      score += consecutive.length ** 2
     }
   }
-  return callback(-score)
+  return callback(score)
 }
 
 
@@ -61,30 +57,45 @@ const alphabeta = AlphaBetaConstructor({
   uniqueKey: JSON.stringify,
 })
 
-function * computerSaga() {
-  yield takeLeading('*', function* () {
-    if(yield select(selectors.isTurnComputer)) {
-      const columns = yield select(selectors.columns)
-      const currentPlayer = yield select(selectors.currentPlayer)
-      const opponentType = yield select(selectors.opponentType)
-      const alphabetaConfig = {
-        state: {
-          columns,
-          currentPlayer,
-          columnIndex: undefined,
-        },
-        depth: prop(opponentType, {
-          [PlayerType.EasyComputer]: 3,
-          [PlayerType.MediumComputer]: 4,
-          [PlayerType.HardComputer]: 5,
-        }),
-      }
-      alphabeta.setup(alphabetaConfig)
-      const bestState = yield call(() => new Promise((resolve) => alphabeta.allSteps(resolve)))
-      yield delay(1000/4)
-      yield put(actions.dropDisc(opponentType, bestState.columnIndex))
+function* computerDropDisc() {
+  const columns = yield select(selectors.columns)
+  const currentPlayer = yield select(selectors.currentPlayer)
+  const opponentType = yield select(selectors.opponentType)
+  const alphabetaConfig = {
+    state: {
+      columns,
+      currentPlayer,
+      columnIndex: undefined,
+    },
+    depth: prop(opponentType, {
+      [PlayerType.EasyComputer]: 3,
+      [PlayerType.MediumComputer]: 4,
+      [PlayerType.HardComputer]: 5,
+    }),
+  }
+  alphabeta.setup(alphabetaConfig)
+  const bestState = yield call(() => new Promise((resolve) => alphabeta.allSteps(resolve)))
+  yield delay(1000/4)
+  yield put(actions.dropDisc(opponentType, bestState.columnIndex))
+}
+
+function* blockUntil(predicate) {
+  while(true) {
+    yield take('*')
+    if(yield select(predicate)) {
+      break
     }
-  })
+  }
+}
+
+function * computerSaga() {
+  while(true) {
+    yield* blockUntil(selectors.isTurnComputer)
+    yield race([
+      call(computerDropDisc),
+      take('RESTART_GAME'),
+    ])
+  }
 }
 
 export default computerSaga

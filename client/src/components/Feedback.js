@@ -40,7 +40,7 @@ const useStyles = makeStyles(theme => ({
 
   feedback: {
     textAlign: 'center',
-    fontSize: 'inherit',
+    fontSize: 'medium',
     fontWeight: "bold",
     color: theme.palette.text.secondary,
   },

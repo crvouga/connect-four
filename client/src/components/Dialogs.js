@@ -23,7 +23,6 @@ import ListItemText from '@material-ui/core/ListItemText'
 import ComputerIcon from '@material-ui/icons/Computer'
 import PersonIcon from '@material-ui/icons/Person'
 import PublicIcon from '@material-ui/icons/Public'
-import BackspaceIcon from '@material-ui/icons/Backspace'
 import Box from '@material-ui/core/Box'
 import Divider from '@material-ui/core/Divider'
 import {
@@ -31,7 +30,6 @@ import {
   isNil,
   prop,
   drop,
-  dropLast,
 } from 'ramda'
 import { 
   connectModal,
@@ -44,21 +42,10 @@ import {
   PlayerType
 } from '../constants'
 import Slide from '@material-ui/core/Slide';
-import makeStyles from '@material-ui/core/styles/makeStyles'
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
-
-const useStyles = makeStyles(theme => ({
-  keyPadButton: {
-    fontWeight: 'bold',
-    fontSize:'large',
-    color: theme.palette.text.secondary,
-  },
-}))
-
-
 
 
 const JoinRoomDialog = connectModal({name: 'joinRoom', destroyOnHide: false})(props => {
@@ -66,7 +53,6 @@ const JoinRoomDialog = connectModal({name: 'joinRoom', destroyOnHide: false})(pr
   const dispatch = useDispatch()
   const [roomIdText, setRoomIdText] = useState('')
   const error = useSelector(selectors.joinRoomError)
-  const classes = useStyles()
 
   const maxLength = 3
   useEffect(
@@ -88,94 +74,36 @@ const JoinRoomDialog = connectModal({name: 'joinRoom', destroyOnHide: false})(pr
     setRoomIdText(roomIdText)
   }
 
-  const appendDigit = (digit) => () => {
-    setRoomIdText(roomIdText + digit)
-  }
-
-  const dropLastDigit = () => {
-    setRoomIdText(dropLast(1))
-  }
-
-
   const onClose = () => {
     setRoomIdText('')
     dispatch(actions.joinRoomError(undefined))
     dispatch(cancel())
   }
 
-  const Key = ({ text, ...props }) => (
-    <Grid item justify="center">
-      <Button size="large" {...props}>
-        <Box className={classes.keyPadButton}> 
-          {text}
-        </Box>
-      </Button>
-    </Grid>
-  )
-  
-  const Digit = ({ onClick, digit, ...props }) => (
-    <Key onClick={appendDigit(digit)} text={digit} {...props} />
-  )
-
-  const NumberPad = (props) => 
-    <Grid {...props}>
-      <Grid >
-        <Grid container>
-          <Digit digit={1} />
-          <Digit digit={2} />
-          <Digit digit={3} />
-        </Grid>
-      </Grid>
-      <Grid item spacing={0}>
-        <Grid container>
-          <Digit digit={4} />
-          <Digit digit={5} />
-          <Digit digit={6} />
-        </Grid>
-      </Grid>
-      <Grid item>
-        <Grid container>
-          <Digit digit={7} />
-          <Digit digit={8} />
-          <Digit digit={9} />
-        </Grid>
-      </Grid>
-      <Grid item>
-        <Grid container>
-          <Key onClick={dropLastDigit} text={<BackspaceIcon fontSize='inherit'/>} />
-          <Digit digit={0} />
-          <Key disabled />
-        </Grid>
-      </Grid>
-    </Grid>
+  const handleJoin = () => {
+    dispatch(submit(roomIdText))
+  }
 
   return (   
     <Dialog open={isOpen} onClose={onClose} TransitionComponent={Transition}>
+      <DialogTitle>What game number?</DialogTitle>
       <DialogContent>
-        <Grid 
-          container   
-          direction="column"
-          justify="center"
-          alignItems="center"
-          spacing={0}
-          >
-          <Grid item>
-            <TextField 
-              type='number'
-              pattern="[0-9]*"
-              inputmode="numeric"
-              variant='outlined'
-              color='primary'
-              error={not(isNil(error))}
-              helperText={prop('reason', error)}
-              label={"Game Number"}
-              value={roomIdText}
-              onChange={handleChange}
-              />
-          </Grid>
-          {/* <NumberPad item/> */}
-        </Grid>
+        <TextField 
+          autoFocus={true}
+          type='tel'
+          pattern="[0-9]*"
+          inputmode="numeric"
+          variant='outlined'
+          color='primary'
+          error={not(isNil(error))}
+          helperText={prop('reason', error)}
+          value={roomIdText}
+          onChange={handleChange}
+          />
       </DialogContent>
+      <DialogActions>
+        <Button color="primary" onClick={handleJoin}>Join</Button>
+      </DialogActions>
     </Dialog>
   )
 })
@@ -236,7 +164,6 @@ const LeaveRoomDialog = connectModal({name: 'leaveRoom', destroyOnHide: false})(
 const MenuDialog = connectModal({name: 'menu', destroyOnHide: false})(props => {
   const { show: isOpen,  } = props
   const isOpponentOnline = useSelector(selectors.isOpponentOnline)
-  const isSocketNotConnected = useSelector(selectors.isSocketNotConnected)
   const dispatch = useDispatch()
   const onClose = () => {
     dispatch(hide('menu'))
@@ -270,14 +197,14 @@ const MenuDialog = connectModal({name: 'menu', destroyOnHide: false})(props => {
           <ListItemText primary="Play against a friend"/>
         </ListSubheader>
 
-        <ListItem button disabled={isSocketNotConnected} onClick={handleStartRoom}>
+        <ListItem button onClick={handleStartRoom}>
           <ListItemIcon>
             <PublicIcon fontSize="small" />
           </ListItemIcon>
           <ListItemText primary="Start Game"/>
         </ListItem>
 
-        <ListItem button disabled={isSocketNotConnected} onClick={handelJoinRoom}>
+        <ListItem button onClick={handelJoinRoom}>
           <ListItemIcon>
             <PublicIcon fontSize="small" />
           </ListItemIcon>          

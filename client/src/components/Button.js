@@ -45,7 +45,7 @@ const GameButton = () => {
         color='primary' 
         onClick={handleChangeTeam}
         >
-        <Box fontWeight="bold">
+        <Box fontWeight="bold" fontSize="large">
           Change Team
         </Box>
       </Button> :
@@ -57,7 +57,7 @@ const GameButton = () => {
         variant= {isGameOver ? 'contained' : 'text'} 
         onClick={handleRestartGame}
         >
-        <Box fontWeight="bold">
+        <Box fontWeight="bold" fontSize="large">
           {isGameOver ? 'Play Again' : 'Restart Game'}
         </Box>
       </Button>:
@@ -71,7 +71,7 @@ const GameButton = () => {
           variant='contained' 
           onClick={handleRematch}
           >
-          <Box fontWeight="bold">
+          <Box fontWeight="bold" fontSize="large">
             {isWaitingForRematch ? 'Waiting for opponent...' : 'Rematch'}
           </Box>
         </Button>

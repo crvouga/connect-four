@@ -42,7 +42,7 @@ const notifications = {
     message: 'Online multiplayer is available',
     position: 'bc',
   }),
-  DISCONNECTION: error({
+  DISCONNECTION: info({
     title: 'Server disconnection',
     message: 'Online multiplayer is unavailable',
     position: 'bc',
