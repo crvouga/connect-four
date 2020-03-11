@@ -14,15 +14,8 @@ app.get("*", (req, res) => {
 
 const PORT = process.env.PORT || 8080
 server.listen(PORT, () => {
-  require('localtunnel')({ port: PORT })
-    .then(tunnel => {
-      console.log(tunnel.url)
-    })
   console.log("Listening on port", PORT)
 })
-
-
-
 
 /* 
   Socket
