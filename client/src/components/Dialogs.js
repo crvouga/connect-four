@@ -43,10 +43,9 @@ import {
 } from '../constants'
 import Slide from '@material-ui/core/Slide';
 
-const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
-
+const DialogTransition = React.forwardRef((props, ref) => {
+  return <Slide direction="right" ref={ref} {...props} />;
+})
 
 const JoinRoomDialog = connectModal({name: 'joinRoom', destroyOnHide: false})(props => {
   const { show: isOpen, submit, cancel } = props
@@ -85,7 +84,7 @@ const JoinRoomDialog = connectModal({name: 'joinRoom', destroyOnHide: false})(pr
   }
 
   return (   
-    <Dialog open={isOpen} onClose={onClose} TransitionComponent={Transition}>
+    <Dialog open={isOpen} onClose={onClose} TransitionComponent={DialogTransition}>
       <DialogTitle>What game number?</DialogTitle>
       <DialogContent>
         <TextField 
@@ -115,7 +114,7 @@ const StartRoomDialog = connectModal({name: 'startRoom', destroyOnHide: false})(
   const dispatch = useDispatch()
 
   return (
-    <Dialog open={isOpen} onClose={() => dispatch(cancel())} TransitionComponent={Transition} >
+    <Dialog open={isOpen} onClose={() => dispatch(cancel())} TransitionComponent={DialogTransition} >
       <DialogTitle>Game number is{' '}
         <Box display="inline" fontWeight="bold" color="primary">
           {roomId}
@@ -147,7 +146,7 @@ const LeaveRoomDialog = connectModal({name: 'leaveRoom', destroyOnHide: false})(
     dispatch(hide('leaveRoom'))
   }
   return (
-    <Dialog open={isOpen} onClose={onClose} TransitionComponent={Transition}>
+    <Dialog open={isOpen} onClose={onClose} TransitionComponent={DialogTransition}>
       <DialogTitle>Are you sure you want to leave game?</DialogTitle>
       <DialogContent>
       </DialogContent>
@@ -164,6 +163,7 @@ const LeaveRoomDialog = connectModal({name: 'leaveRoom', destroyOnHide: false})(
 const MenuDialog = connectModal({name: 'menu', destroyOnHide: false})(props => {
   const { show: isOpen,  } = props
   const isOpponentOnline = useSelector(selectors.isOpponentOnline)
+  const isSocketNotConnected = useSelector(selectors.isSocketNotConnected)
   const dispatch = useDispatch()
   const onClose = () => {
     dispatch(hide('menu'))
@@ -191,20 +191,20 @@ const MenuDialog = connectModal({name: 'menu', destroyOnHide: false})(props => {
 
 
   return (
-    <Dialog open={isOpen} onClose={onClose} TransitionComponent={Transition}>
+    <Dialog open={isOpen} onClose={onClose} TransitionComponent={DialogTransition}>
       <List>
         <ListSubheader>
           <ListItemText primary="Play against a friend"/>
         </ListSubheader>
 
-        <ListItem button onClick={handleStartRoom}>
+        <ListItem button disabled={isSocketNotConnected} onClick={handleStartRoom}>
           <ListItemIcon>
             <PublicIcon fontSize="small" />
           </ListItemIcon>
           <ListItemText primary="Start Game"/>
         </ListItem>
 
-        <ListItem button onClick={handelJoinRoom}>
+        <ListItem button disabled={isSocketNotConnected} onClick={handelJoinRoom}>
           <ListItemIcon>
             <PublicIcon fontSize="small" />
           </ListItemIcon>          

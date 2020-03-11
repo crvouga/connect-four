@@ -10,7 +10,6 @@ import PublicIcon from '@material-ui/icons/Public'
 import LinearProgress from '@material-ui/core/LinearProgress'
 import SentimentVerySatisfiedIcon from '@material-ui/icons/SentimentVerySatisfied';
 import SentimentVeryDissatisfiedIcon from '@material-ui/icons/SentimentVeryDissatisfied';
-import Typography from '@material-ui/core/Typography'
 import { 
   makeStyles 
 } from '@material-ui/styles';
@@ -40,7 +39,7 @@ const useStyles = makeStyles(theme => ({
 
   feedback: {
     textAlign: 'center',
-    fontSize: 'medium',
+    fontSize: 'large',
     fontWeight: "bold",
     color: theme.palette.text.secondary,
   },
@@ -90,7 +89,7 @@ const Feedback = () => {
           
           (isGameStart && isOpponentComputer && isTurnOffline) ?
           <>
-            Start Game or Change Team
+            Drop Disc or Change Team
           </> :
 
 

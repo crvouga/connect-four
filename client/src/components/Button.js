@@ -14,6 +14,7 @@ import {
 import { 
   Player
 } from '../constants';
+
 const GameButton = () => {
   const isOpponentOnline = useSelector(selectors.isOpponentOnline)
   const isOpponentComputer = useSelector(selectors.isOpponentComputer)
@@ -72,7 +73,7 @@ const GameButton = () => {
           onClick={handleRematch}
           >
           <Box fontWeight="bold" fontSize="large">
-            {isWaitingForRematch ? 'Waiting for opponent...' : 'Rematch'}
+            {isWaitingForRematch ? 'Waiting for opponent...' : 'Play Again'}
           </Box>
         </Button>
         {isWaitingForRematch && <LinearProgress variant='query' />}

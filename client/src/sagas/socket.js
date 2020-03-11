@@ -36,48 +36,49 @@ import {
 import * as selectors  from '../selectors'
 import actions from '../actions'
 
+const position = 'bc'
 const notifications = {
   CONNECTION: success({
     title: 'Server connection',
     message: 'Online multiplayer is available',
-    position: 'bc',
+    position,
   }),
   DISCONNECTION: info({
     title: 'Server disconnection',
     message: 'Online multiplayer is unavailable',
-    position: 'bc',
+    position,
   }),
   ROOM_ENDED: error({
     title: `Opponent has lefted the game`,
-    position: 'tc',
+    position: 'bc',
   }),
   ENDED_ROOM: info({
     title: `You have lefted the game`,
-    position: 'bc',
+    position,
   }),
   STARTED_ROOM: info({
     title: `Started a game`,
     message: `Waiting for an opponent to join`,
-    position: 'bc',
+    position,
   }),
   JOINED_ROOM: success({
     title: `You joined a game!`,
     message: `Opponent's turn`,
-    position: 'tc',
+    position,
   }),
   ROOM_JOINED: success({
     title: `Opponent joined your game!`,
     message: `Your turn`,
-    position: 'tc',
+    position,
   }),
   REMATCH: success({
     title: 'Rematch!',
     message: `Winner goes first`,
-    position: 'tc',
+    position,
   }),
   SOCKET_REQUEST_RESTART_GAME: info({
     title: `Opponent wants to rematch`,
-    position: 'tc',
+    position,
   }),
 }
 
@@ -134,7 +135,7 @@ function* inGameSaga(socket) {
               if(not(yield select(selectors.isWaitingForRematch))) {
                 yield put(info({
                   title: 'Opponent wants a rematch!',
-                  position: 'tc',
+                  position,
                 }))
               }
               break;

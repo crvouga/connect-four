@@ -1,6 +1,4 @@
-import React, {
-  useEffect,
-} from 'react';
+import React from 'react';
 import { 
   useSelector,
   useDispatch,
@@ -17,14 +15,11 @@ import yellow from '@material-ui/core/colors/yellow'
 import blue from '@material-ui/core/colors/blue'
 import IconButton from '@material-ui/core/IconButton'
 import MenuIcon from '@material-ui/icons/Menu'
-import {
-  not
-} from 'ramda'
 import { 
   Player 
 } from "../constants";
 import * as selectors from '../selectors'
-import Button from './Button'
+import GameButton from './Button'
 import Feedback from './Feedback'
 import Board from './Board'
 import Dialogs from './Dialogs'
@@ -42,6 +37,11 @@ const theme = createMuiTheme({
       dark: blue[900],
     },
   },
+  props: {
+    MuiButtonBase: {
+      disableRipple: true,
+    },
+  },
   [Player.One]: red[600],
   [Player.Two]: yellow[600],
 })
@@ -49,31 +49,18 @@ const theme = createMuiTheme({
 const useStyles = makeStyles(theme => ({
   root: {
     userSelect: 'none',
+    marginTop: theme.spacing(1),
     padding: 0,
   },
 }))
 
-
+window.onbeforeunload = (e) => {
+  e.returnValue = ''
+}
 
 const App = () => {
   const classes = useStyles()
   const notifications = useSelector(selectors.notifications)
-  const isOpponentOnline = useSelector(selectors.isOpponentOnline)
-  
-  /* handles page refresh during online game */
-  useEffect(
-    () => {
-      window.onbeforeunload = (e) => {
-        if(not(isOpponentOnline)) {
-          e.preventDefault()
-        } else {
-          e.returnValue = ''
-        }
-      }
-    },
-    [isOpponentOnline]
-  )
-
   const dispatch = useDispatch()
   const handleOpen = () => {
     dispatch(show('menu'))
@@ -85,12 +72,12 @@ const App = () => {
       <Dialogs />
       <Notifications notifications={notifications} />
       <Container maxWidth="xs" className={classes.root} >
-        <IconButton size="medium" onClick={handleOpen}>
+        <IconButton onClick={handleOpen}>
           <MenuIcon />
         </IconButton>
         <Feedback />
         <Board />
-        <Button />
+        <GameButton />
       </Container>
     </ThemeProvider>
   )
