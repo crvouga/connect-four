@@ -20,9 +20,8 @@ import * as selectors from '../selectors'
 
 const useStyles = makeStyles(theme => ({
   column: { 
-    cursor: ({ isGameOver, isColumnFull, isTurnNotOffline }) => 
+    cursor: ({ isGameOver, isColumnFull }) => 
       isGameOver ? 'default' :
-      isTurnNotOffline ? 'wait' :
       isColumnFull ? 'not-allowed' : 
       'pointer'
   },
@@ -32,8 +31,7 @@ const Column = (props) => {
   const { columnIndex } = props
   const isGameOver = useSelector(selectors.isGameOver)
   const isColumnFull = useSelector(selectors.isColumnFull(columnIndex))
-  const isTurnNotOffline = useSelector(selectors.isTurnNotOffline)
-  const classes = useStyles({isColumnFull, isTurnNotOffline, isGameOver})
+  const classes = useStyles({isColumnFull, isGameOver})
   const dispatch = useDispatch()
 
   const handleClick = () => {

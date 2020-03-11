@@ -117,6 +117,37 @@ const JoinRoomDialog = connectModal({name: 'joinRoom', destroyOnHide: false})(pr
     <Key onClick={appendDigit(digit)} text={digit} {...props} />
   )
 
+  const NumberPad = (props) => 
+    <Grid {...props}>
+      <Grid >
+        <Grid container>
+          <Digit digit={1} />
+          <Digit digit={2} />
+          <Digit digit={3} />
+        </Grid>
+      </Grid>
+      <Grid item spacing={0}>
+        <Grid container>
+          <Digit digit={4} />
+          <Digit digit={5} />
+          <Digit digit={6} />
+        </Grid>
+      </Grid>
+      <Grid item>
+        <Grid container>
+          <Digit digit={7} />
+          <Digit digit={8} />
+          <Digit digit={9} />
+        </Grid>
+      </Grid>
+      <Grid item>
+        <Grid container>
+          <Key onClick={dropLastDigit} text={<BackspaceIcon fontSize='inherit'/>} />
+          <Digit digit={0} />
+          <Key disabled />
+        </Grid>
+      </Grid>
+    </Grid>
 
   return (   
     <Dialog open={isOpen} onClose={onClose} TransitionComponent={Transition}>
@@ -131,6 +162,8 @@ const JoinRoomDialog = connectModal({name: 'joinRoom', destroyOnHide: false})(pr
           <Grid item>
             <TextField 
               type='number'
+              pattern="[0-9]*"
+              inputmode="numeric"
               variant='outlined'
               color='primary'
               error={not(isNil(error))}
@@ -140,34 +173,7 @@ const JoinRoomDialog = connectModal({name: 'joinRoom', destroyOnHide: false})(pr
               onChange={handleChange}
               />
           </Grid>
-          <Grid item>
-            <Grid container>
-              <Digit digit={1} />
-              <Digit digit={2} />
-              <Digit digit={3} />
-            </Grid>
-          </Grid>
-          <Grid item spacing={0}>
-            <Grid container>
-              <Digit digit={4} />
-              <Digit digit={5} />
-              <Digit digit={6} />
-            </Grid>
-          </Grid>
-          <Grid item>
-            <Grid container>
-              <Digit digit={7} />
-              <Digit digit={8} />
-              <Digit digit={9} />
-            </Grid>
-          </Grid>
-          <Grid item>
-            <Grid container>
-              <Key onClick={dropLastDigit} text={<BackspaceIcon fontSize='inherit'/>} />
-              <Digit digit={0} />
-              <Key disabled />
-            </Grid>
-          </Grid>
+          {/* <NumberPad item/> */}
         </Grid>
       </DialogContent>
     </Dialog>
