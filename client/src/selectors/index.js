@@ -164,6 +164,11 @@ export const winner = createSelector(
     isWin && oppositePlayer(currentPlayer)
 )
 
+export const loser = createSelector(
+  winner,
+  oppositePlayer
+)
+
 export const isOpponentOffline = createSelector(
   opponentType, 
   equals(PlayerType.Offline)

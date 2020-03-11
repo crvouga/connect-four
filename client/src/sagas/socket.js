@@ -26,13 +26,12 @@ import {
 } from 'redux-actions'
 import { 
   show, 
-  hide, 
+  hide,
 } from 'redux-modal';
 import { 
   success, 
   error, 
   info,
-  warning,
 } from 'react-notification-system-redux'
 import * as selectors  from '../selectors'
 import actions from '../actions'
@@ -40,35 +39,45 @@ import actions from '../actions'
 const notifications = {
   CONNECTION: success({
     title: 'Server connection',
-    message: 'Online multiplayer is available'
+    message: 'Online multiplayer is available',
+    position: 'bc',
   }),
   DISCONNECTION: error({
     title: 'Server disconnection',
-    message: 'Online multiplayer is unavailable'
+    message: 'Online multiplayer is unavailable',
+    position: 'bc',
   }),
   ROOM_ENDED: error({
     title: `Opponent has lefted the game`,
+    position: 'tc',
   }),
-  ENDED_ROOM: warning({
+  ENDED_ROOM: info({
     title: `You have lefted the game`,
+    position: 'bc',
   }),
   STARTED_ROOM: info({
-    title: `Game Started`,
-    message: `Waiting for somebody to join`,
+    title: `Started a game`,
+    message: `Waiting for an opponent to join`,
+    position: 'bc',
   }),
   JOINED_ROOM: success({
-    title: `You joined opponent's game!`,
-    message: `Opponents turn...`,
+    title: `You joined a game!`,
+    message: `Opponent's turn`,
+    position: 'tc',
   }),
   ROOM_JOINED: success({
     title: `Opponent joined your game!`,
     message: `Your turn`,
+    position: 'tc',
   }),
   REMATCH: success({
-    title: 'Rematch!'
+    title: 'Rematch!',
+    message: `Winner goes first`,
+    position: 'tc',
   }),
   SOCKET_REQUEST_RESTART_GAME: info({
     title: `Opponent wants to rematch`,
+    position: 'tc',
   }),
 }
 
@@ -105,17 +114,8 @@ function* startRoomSaga(socket) {
 }
 
 function* leaveRoomSaga(socket) {
-  yield takeLatest('LEAVE_ROOM', function* ({payload: interceptedAction}) {
-    yield put(show('leaveRoom', createActions({CONFIRM: undefined, CANCEL: undefined,})))
-    yield race([
-      take(['DISCONNECTION', 'ROOM_ENDED', 'CANCEL']),
-      call(function* () {
-        yield take('CONFIRM')
-        socket.emit('leaveRoom')
-        yield put(interceptedAction)
-      })
-    ])
-    yield put(hide('leaveRoom'))
+  yield takeLatest('LEAVE_ROOM', function* () {
+    socket.emit('leaveRoom')
   })
 }
 
@@ -133,7 +133,8 @@ function* inGameSaga(socket) {
             if(socketAction.type === 'REQUEST_REMATCH') {
               if(not(yield select(selectors.isWaitingForRematch))) {
                 yield put(info({
-                  title: 'Opponent wants a rematch!'
+                  title: 'Opponent wants a rematch!',
+                  position: 'tc',
                 }))
               }
               break;
@@ -167,7 +168,7 @@ function* readSocketSaga(socket) {
 }
 
 function* socketSaga() {
-  const socket = io('')
+  const socket = io('http://localhost:5000/')
   yield* readSocketSaga(socket)
   yield* notificationsSaga()
   yield* joinRoomSaga(socket)

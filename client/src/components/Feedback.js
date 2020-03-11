@@ -4,9 +4,13 @@ import {
 } from 'react-redux'
 import Box from '@material-ui/core/Box';
 import SvgIcon from '@material-ui/core/SvgIcon';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import ComputerIcon from '@material-ui/icons/Computer'
 import PersonIcon from '@material-ui/icons/Person'
+import PublicIcon from '@material-ui/icons/Public'
+import LinearProgress from '@material-ui/core/LinearProgress'
+import SentimentVerySatisfiedIcon from '@material-ui/icons/SentimentVerySatisfied';
+import SentimentVeryDissatisfiedIcon from '@material-ui/icons/SentimentVeryDissatisfied';
+import Typography from '@material-ui/core/Typography'
 import { 
   makeStyles 
 } from '@material-ui/styles';
@@ -34,77 +38,104 @@ const useStyles = makeStyles(theme => ({
     fontSize: 'inherit',
   },
 
-  message: {
+  feedback: {
     textAlign: 'center',
-    fontSize: 'small',
+    fontSize: 'inherit',
+    fontWeight: "bold",
     color: theme.palette.text.secondary,
   },
 
 }))
 
-const Message = () => {
+const Feedback = () => {
   const currentPlayer = useSelector(selectors.currentPlayer)
   const isTie = useSelector(selectors.isTie)
   const isWin = useSelector(selectors.isWin)
+  const isGameOver = useSelector(selectors.isGameOver)
   const isGameStart = useSelector(selectors.isGameStart)
   const isOpponentComputer = useSelector(selectors.isOpponentComputer)
   const isOpponentOnline = useSelector(selectors.isOpponentOnline)
   const isTurnOffline = useSelector(selectors.isTurnOffline)
   const winner = useSelector(selectors.winner)
+  const loser = useSelector(selectors.loser)
   const classes = useStyles({player: currentPlayer})
 
   return (
-      <Box className={classes.message}>
+      <Box className={classes.feedback} >
         {
         isWin ?
-          <React.Fragment>
-            Game Over
-            {' '}
+          <>
             <DiscIcon className={classes[winner]} />
             {' '}
-            Won
-          </React.Fragment> :
-         isTie ?
-          <React.Fragment>
-            Tie Game
+            <SentimentVerySatisfiedIcon fontSize='inherit'/>
             {' '}
+            Winner
+            {' '}
+            <DiscIcon className={classes[loser]} />
+            {' '}
+            <SentimentVeryDissatisfiedIcon fontSize='inherit'/>
+            {' '}
+            Loser
+          </> :
+
+         isTie ?
+          <>
             <DiscIcon className={classes[Player.One]} />
+            {' '}
+            Tie
             {' '}
             <DiscIcon className={classes[Player.Two]} />
             {' '}
-          </React.Fragment> :
+          </> :
+          
+          (isGameStart && isOpponentComputer && isTurnOffline) ?
+          <>
+            Start Game or Change Team
+          </> :
+
 
         isOpponentOnline ? (
-            <React.Fragment>
+            <>
               <DiscIcon className={classes[currentPlayer]} />
               {' '}
               {isTurnOffline ?
-                <React.Fragment>
-                  Your Turn
-                </React.Fragment> :
-                <React.Fragment>
-                  Opponent's Turn...
+                <>
+                  <PersonIcon fontSize='inherit' /> 
                   {' '}
-                  <CircularProgress size={18} />
-                </React.Fragment>}
-            </React.Fragment>
+                  Your Turn
+                </> :
+                <>
+                  <PublicIcon fontSize='inherit'/>
+                  {' '}
+                  Opponent's Turn
+                </>}
+            </>
           ) :
           
-          (isGameStart && isOpponentComputer) ?
-          <React.Fragment>
-            Start Game or Change Team
-          </React.Fragment> :
-
-          <React.Fragment>
+          <>
             <DiscIcon className={classes[currentPlayer]} />
             {' '} 
-            {isTurnOffline ? <PersonIcon fontSize='inherit' /> : <ComputerIcon fontSize='inherit' />}
-            {' '} 
-            Turn
-          </React.Fragment> 
+            {isTurnOffline ? 
+            <>
+              <PersonIcon fontSize='inherit' /> 
+               {' '} 
+               Turn
+
+            </> :
+            <>
+              <ComputerIcon fontSize='inherit' /> 
+              {' '} 
+              Turn
+            </>}
+          </> 
       }
+      <LinearProgress 
+        color="primary"
+        variant={isTurnOffline || isGameOver ? "determinate" : "query"} 
+        value={100}
+        />
       </Box>
   )
 }
 
-export default Message
+export default Feedback

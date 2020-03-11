@@ -13,12 +13,20 @@ import {
   when,
   o,
   take,
+  pipe,
+  cond,
+  equals,
+  always,
+  T,
+  identity,
 } from 'ramda'
 import { 
   currentPlayer, 
   isTurn, 
-  oppositePlayer,
   isOpponentOnline,
+  oppositePlayer,
+  winner,
+  loser,
 } from '../selectors';
 import { 
   COLUMN_COUNT, 
@@ -48,8 +56,18 @@ export const reducer = handleActions(
     [actions.changeOpponent]: (state, {payload: {playerType}}) =>
       mergeRight(state, {opponentType: playerType, columns: emptyColumns, offlinePlayer: Player.One}),
 
-    [actions.rematch]: 
-      mergeLeft({columns: emptyColumns}),
+    [actions.rematch]: (state) =>
+      pipe(
+        mergeLeft({columns: emptyColumns}),
+        evolve({
+          offlinePlayer:
+            cond([
+              [equals(winner(state)), always(Player.One)],
+              [equals(loser(state)), always(Player.Two)],
+              [T, identity],
+            ]),
+        })
+      )(state),
 
     [actions.socketAction]: (state, {payload: opponentAction}) =>
       handleActions(

@@ -16,8 +16,8 @@ export const reducer = handleActions(
     [actions.roomJoined]:
       mergeLeft({roomId: undefined}),
 
-    [actions.joinRoomFailed]: (state, {payload: joinRoomError}) => 
-      mergeLeft({joinRoomError}, state),
+    [actions.joinRoomError]: (state, {payload: error}) => 
+      mergeLeft({joinRoomError: error}, state),
 
     [actions.requestRematch]: 
       mergeLeft({isWaitingForRematch: true}),

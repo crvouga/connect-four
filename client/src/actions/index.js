@@ -13,7 +13,7 @@ export default createActions({
   CONNECTION: undefined,
   DISCONNECTION: undefined,
   STARTED_ROOM: undefined,
-  JOIN_ROOM_FAILED: undefined,
+  JOIN_ROOM_ERROR: undefined,
   JOINED_ROOM: undefined,
   ROOM_JOINED: undefined,
   ENDED_ROOM: undefined,

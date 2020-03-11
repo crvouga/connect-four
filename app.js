@@ -22,12 +22,15 @@ server.listen(PORT, () => {
   Socket
 */
 
+const randomDigit = () =>
+  Math.floor(Math.random() * 10)
+
 const currentRoomIds = socket =>
   Object.keys(io.sockets.adapter.sids[socket.id] || {}).filter((roomId) => roomId !== socket.id)
 
 const startRoomHandler = socket => () => {
   /* TODO: prevent roomId collisions */
-  const roomId =  Math.floor(Math.random() * 900) + 100
+  const roomId = '' + randomDigit() + randomDigit() + randomDigit()
   socket.join(roomId)
   socket.emit('STARTED_ROOM', roomId)
 }
@@ -44,11 +47,11 @@ const joinRoomHandler = socket => roomId => {
 
     } else {
       const reason =
-        socketIds.length === 0 ? 'Game does not exist' :
-        socketIds.length > 1 ? 'Game is full' :
+        socketIds.length === 0 ? "Couldn't find game" :
+        socketIds.length > 1 ? "Game is full" :
         'Unkown reason'
 
-      socket.emit('JOIN_ROOM_FAILED', { error, roomId, reason,})
+      socket.emit('JOIN_ROOM_ERROR', { error, roomId, reason,})
     }
   })
 }
