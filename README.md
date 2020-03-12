@@ -1,3 +1,3 @@
-
-# [Click here to play](https://vouga-connect-four.herokuapp.com/)
-[![](preview.gif)](https://vouga-connect-four.herokuapp.com/)
+# Connect Four
+## Link: https://vouga-connect-four.herokuapp.com/
+![](preview.gif)
