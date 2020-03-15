@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="260px" height="260px" viewBox="0 0 2 2" xml:space="preserve">
+ <defs>
+    <pattern id="cell-pattern" patternUnits="userSpaceOnUse" width="1" height="1">
+      <circle  cx="0.5" cy="0.5" r="0.45" fill="black"></circle>
+    </pattern>
+    <mask id="hole-mask">
+      <rect width="10" height="60" fill="white"></rect>
+      <rect width="10" height="60" fill="url(#cell-pattern)"></rect>
+    </mask>
+  </defs>
+  <circle cx="0.5" cy="0" r="0.5" fill="#fdd835" />
+  <circle cx="1.5" cy="1.5" r="0.5" fill="#fdd835" />
+  <circle cx="1.5" cy="0.5" r="0.5" fill="#e53935" />
+  <circle cx="0.5" cy="1.5" r="0.5" fill="#e53935" />
+  <rect x="0" y="0" width="2" height="2" mask="url(#hole-mask)" fill="#1e88e5" />
+</svg>

@@ -41,10 +41,15 @@ import actions from '../actions'
 import {
   PlayerType
 } from '../constants'
-import Slide from '@material-ui/core/Slide';
+import Slide from '@material-ui/core/Slide'
+import Zoom from '@material-ui/core/Zoom'
 
-const DialogTransition = React.forwardRef((props, ref) => {
+const SlideRight = React.forwardRef((props, ref) => {
   return <Slide direction="right" ref={ref} {...props} />;
+})
+
+const ZoomIn = React.forwardRef((props, ref) => {
+  return <Zoom ref={ref} {...props} />;
 })
 
 const JoinRoomDialog = connectModal({name: 'joinRoom', destroyOnHide: false})(props => {
@@ -84,14 +89,14 @@ const JoinRoomDialog = connectModal({name: 'joinRoom', destroyOnHide: false})(pr
   }
 
   return (   
-    <Dialog open={isOpen} onClose={onClose} TransitionComponent={DialogTransition}>
+    <Dialog open={isOpen} onClose={onClose} TransitionComponent={ZoomIn}>
       <DialogTitle>What game number?</DialogTitle>
       <DialogContent>
         <TextField 
           autoFocus={true}
           type='tel'
           pattern="[0-9]*"
-          inputmode="numeric"
+          inputMode="numeric"
           variant='outlined'
           color='primary'
           error={not(isNil(error))}
@@ -114,7 +119,7 @@ const StartRoomDialog = connectModal({name: 'startRoom', destroyOnHide: false})(
   const dispatch = useDispatch()
 
   return (
-    <Dialog open={isOpen} onClose={() => dispatch(cancel())} TransitionComponent={DialogTransition} >
+    <Dialog open={isOpen} onClose={() => dispatch(cancel())} TransitionComponent={ZoomIn} >
       <DialogTitle>Game number is{' '}
         <Box display="inline" fontWeight="bold" color="primary">
           {roomId}
@@ -146,7 +151,7 @@ const LeaveRoomDialog = connectModal({name: 'leaveRoom', destroyOnHide: false})(
     dispatch(hide('leaveRoom'))
   }
   return (
-    <Dialog open={isOpen} onClose={onClose} TransitionComponent={DialogTransition}>
+    <Dialog open={isOpen} onClose={onClose} TransitionComponent={ZoomIn}>
       <DialogTitle>Are you sure you want to leave game?</DialogTitle>
       <DialogContent>
       </DialogContent>
@@ -163,7 +168,7 @@ const LeaveRoomDialog = connectModal({name: 'leaveRoom', destroyOnHide: false})(
 const MenuDialog = connectModal({name: 'menu', destroyOnHide: false})(props => {
   const { show: isOpen,  } = props
   const isOpponentOnline = useSelector(selectors.isOpponentOnline)
-  const isSocketNotConnected = useSelector(selectors.isSocketNotConnected)
+  const isSocketNotConnected = false//useSelector(selectors.isSocketNotConnected)
   const dispatch = useDispatch()
   const onClose = () => {
     dispatch(hide('menu'))
@@ -191,7 +196,7 @@ const MenuDialog = connectModal({name: 'menu', destroyOnHide: false})(props => {
 
 
   return (
-    <Dialog open={isOpen} onClose={onClose} TransitionComponent={DialogTransition}>
+    <Dialog open={isOpen} onClose={onClose} direction="right" TransitionComponent={SlideRight}>
       <List>
         <ListSubheader>
           <ListItemText primary="Play against a friend"/>
@@ -199,21 +204,21 @@ const MenuDialog = connectModal({name: 'menu', destroyOnHide: false})(props => {
 
         <ListItem button disabled={isSocketNotConnected} onClick={handleStartRoom}>
           <ListItemIcon>
-            <PublicIcon fontSize="small" />
+            <PublicIcon fontSize="large" />
           </ListItemIcon>
           <ListItemText primary="Start Game"/>
         </ListItem>
 
         <ListItem button disabled={isSocketNotConnected} onClick={handelJoinRoom}>
           <ListItemIcon>
-            <PublicIcon fontSize="small" />
+            <PublicIcon fontSize="large" />
           </ListItemIcon>          
           <ListItemText primary="Join Game"/>
         </ListItem>
 
         <ListItem button onClick={handleChangeOpponent(PlayerType.Offline)}>
           <ListItemIcon>
-            <PersonIcon fontSize="small" />
+            <PersonIcon fontSize="large"/>
           </ListItemIcon>          
           <ListItemText primary="Offline"/>
         </ListItem>
@@ -226,21 +231,21 @@ const MenuDialog = connectModal({name: 'menu', destroyOnHide: false})(props => {
 
         <ListItem button onClick={handleChangeOpponent(PlayerType.EasyComputer)}>
           <ListItemIcon>
-            <ComputerIcon fontSize="small" />
+            <ComputerIcon fontSize="large"/>
           </ListItemIcon>
           <ListItemText primary="Easy"/>
         </ListItem>
         
         <ListItem button onClick={handleChangeOpponent(PlayerType.MediumComputer)}>
           <ListItemIcon>
-            <ComputerIcon fontSize="small" />
+            <ComputerIcon fontSize="large"/>
           </ListItemIcon>
           <ListItemText primary="Medium"/>
         </ListItem>
 
         <ListItem button onClick={handleChangeOpponent(PlayerType.HardComputer)}>
           <ListItemIcon>
-            <ComputerIcon fontSize="small" />
+            <ComputerIcon fontSize="large"/>
           </ListItemIcon>
           <ListItemText primary="Hard"/>
         </ListItem>
