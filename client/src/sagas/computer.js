@@ -6,10 +6,11 @@ import {
   select, 
   call, 
   put, 
-  delay 
+  delay,
+  all,
 } from "@redux-saga/core/effects";
 import { 
-  PlayerType,
+  PlayerType, WIN_COUNT, 
 } from "../constants";
 import * as selectors from "../selectors";
 import actions from "../actions";
@@ -19,11 +20,11 @@ import {
 } from 'ramda'
 
 const scoreFunction = (state, callback) => {
-  let score = 0
+  let score = 1
   for(const consecutive of selectors.consecutives(state)) {
     const player = path(consecutive[0], state.columns)
-    if(player === state.current) {
-      score += consecutive.length ** 2
+    if(player === state.current && consecutive.length >= WIN_COUNT) {
+      score *= 10
     }
   }
   return callback(score)
@@ -47,7 +48,7 @@ const generateMoves = (state) => {
   return successors
 }
 
-const checkWinConditions = selectors.isGameOver
+const checkWinConditions = selectors.isWin
 
 
 const alphabeta = AlphaBetaConstructor({
@@ -74,8 +75,10 @@ function* computerDropDisc() {
     }),
   }
   alphabeta.setup(alphabetaConfig)
-  const bestState = yield call(() => new Promise((resolve) => alphabeta.allSteps(resolve)))
-  yield delay(1000/4)
+  const [bestState, ] = yield all([
+    call(() => new Promise((resolve) => alphabeta.allSteps(resolve))),
+    delay(1000/4),
+  ])
   yield put(actions.dropDisc(opponentType, bestState.columnIndex))
 }
 

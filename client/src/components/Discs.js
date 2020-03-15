@@ -13,6 +13,7 @@ import {
 import * as selectors from '../selectors'
 import red from '@material-ui/core/colors/red'
 import yellow from '@material-ui/core/colors/yellow'
+import grey from '@material-ui/core/colors/grey'
 
 const discEnter = (columnIndex, rowIndex) => node => {
   gsap.fromTo(
@@ -35,7 +36,7 @@ const Discs = () => {
   const columns = useSelector(selectors.columns)
 
   return (
-    <g transform="translate(0.5, 0.5)">
+    <>
       <defs>
         <linearGradient id={Player.One} gradientTransform="rotate(90)">
           <stop offset="0%" stopColor={red[800]}/>
@@ -46,7 +47,7 @@ const Discs = () => {
           <stop offset="100%" stopColor={yellow[400]}/>
         </linearGradient>
       </defs>
-      <TransitionGroup component="g">
+      <TransitionGroup component="g" transform="translate(0.5, 0.5)">
         {columns.map((column, columnIndex) => column.map((player, rowIndex) =>
           <Transition
             key={`${columnIndex} ${rowIndex}`}
@@ -58,7 +59,7 @@ const Discs = () => {
           </Transition>
         ))}
       </TransitionGroup>
-    </g>
+    </>
   )
 }
 

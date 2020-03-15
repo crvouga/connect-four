@@ -56,6 +56,9 @@ export const reducer = handleActions(
     [actions.changeOpponent]: (state, {payload: {playerType}}) =>
       mergeRight(state, {opponentType: playerType, columns: emptyColumns, offlinePlayer: Player.One}),
 
+    /* 
+        Socket
+    */
     [actions.rematch]: (state) =>
       pipe(
         mergeLeft({columns: emptyColumns}),
@@ -86,8 +89,11 @@ export const reducer = handleActions(
 
     [actions.joinedRoom]: 
       mergeLeft({offlinePlayer: Player.Two}),
+    
+    [actions.disconnection]:
+      when(isOpponentOnline, mergeLeft({opponentType: PlayerType.Offline, columns: emptyColumns})),
 
-    [combineActions(actions.roomEnded, actions.disconnection)]:
+    [actions.roomEnded]:
       mergeLeft({opponentType: PlayerType.Offline, columns: emptyColumns}),
       
     [combineActions(actions.startRoom, actions.joinRoom)]:
