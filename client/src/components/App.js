@@ -46,6 +46,8 @@ const theme = createMuiTheme({
   [Player.Two]: yellow[600],
 })
 
+console.log({blue})
+
 const useStyles = makeStyles(theme => ({
   root: {
     userSelect: 'none',
@@ -53,11 +55,6 @@ const useStyles = makeStyles(theme => ({
     padding: 0,
   },
 }))
-
-window.onbeforeunload = (e) => {
-  e.returnValue = ''
-}
-
 
 const App = () => {
   const classes = useStyles()
@@ -67,6 +64,7 @@ const App = () => {
   const handleOpenMenu = () => {
     dispatch(show('menu'))
   }
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />

@@ -33,18 +33,17 @@ const discExit = (columnIndex) => node => {
 
 const Discs = () => {
   const columns = useSelector(selectors.columns)
-  const a = 800
-  const b = 400
+
   return (
     <g transform="translate(0.5, 0.5)">
       <defs>
         <linearGradient id={Player.One} gradientTransform="rotate(90)">
-          <stop offset="0%" stopColor={red[a]}/>
-          <stop offset="100%" stopColor={red[b]}/>
+          <stop offset="0%" stopColor={red[800]}/>
+          <stop offset="100%" stopColor={red[400]}/>
         </linearGradient>
         <linearGradient id={Player.Two} gradientTransform="rotate(90)">
-          <stop offset="0%" stopColor={yellow[a]}/>
-          <stop offset="100%" stopColor={yellow[b]}/>
+          <stop offset="0%" stopColor={yellow[800]}/>
+          <stop offset="100%" stopColor={yellow[400]}/>
         </linearGradient>
       </defs>
       <TransitionGroup component="g">

@@ -168,7 +168,7 @@ const LeaveRoomDialog = connectModal({name: 'leaveRoom', destroyOnHide: false})(
 const MenuDialog = connectModal({name: 'menu', destroyOnHide: false})(props => {
   const { show: isOpen,  } = props
   const isOpponentOnline = useSelector(selectors.isOpponentOnline)
-  const isSocketNotConnected = false//useSelector(selectors.isSocketNotConnected)
+  const isSocketNotConnected = useSelector(selectors.isSocketNotConnected)
   const dispatch = useDispatch()
   const onClose = () => {
     dispatch(hide('menu'))
