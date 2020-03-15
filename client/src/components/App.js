@@ -46,8 +46,6 @@ const theme = createMuiTheme({
   [Player.Two]: yellow[600],
 })
 
-console.log({blue})
-
 const useStyles = makeStyles(theme => ({
   root: {
     userSelect: 'none',
