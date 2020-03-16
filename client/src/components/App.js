@@ -1,4 +1,6 @@
-import React from 'react';
+import React, {
+  useRef,
+} from 'react';
 import { 
   useSelector,
   useDispatch,
@@ -16,10 +18,11 @@ import yellow from '@material-ui/core/colors/yellow'
 import blue from '@material-ui/core/colors/blue'
 import IconButton from '@material-ui/core/IconButton'
 import MenuIcon from '@material-ui/icons/Menu'
-import AddToHomeScreenIcon from '@material-ui/icons/AddToHomeScreen'
-import CodeIcon from '@material-ui/icons/Code';
+import GitHubIcon from '@material-ui/icons/GitHub';
 import Link from '@material-ui/core/Link'
 import Tooltip from '@material-ui/core/Tooltip';
+import Box from '@material-ui/core/Box';
+import Typography from '@material-ui/core/Typography';
 
 import { 
   Player 
@@ -33,18 +36,27 @@ import Notifications from 'react-notification-system-redux'
 import {
   show
 } from 'redux-modal'
+import actions from '../actions'
 
-const theme = createMuiTheme({
+
+const lightTheme = createMuiTheme({
   palette: {
-    primary: {
-      light: blue[200],
-      main: blue[600],
-      dark: blue[900],
-    },
+    type: 'light',
+    primary: blue,
   },
   [Player.One]: red[600],
   [Player.Two]: yellow[600],
 })
+
+const darkTheme = createMuiTheme({
+  palette: {
+    type: 'dark',
+    primary: blue,
+  },
+  [Player.One]: red[600],
+  [Player.Two]: yellow[600],
+})
+
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -54,17 +66,24 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
+import Brightness4Icon from '@material-ui/icons/Brightness4';
+import Brightness7Icon from '@material-ui/icons/Brightness7';
+
 const App = () => {
   const classes = useStyles()
-  const notifications = useSelector(selectors.notifications)
-
   const dispatch = useDispatch()
+  const notifications = useSelector(selectors.notifications)
+  const theme = useSelector(selectors.theme)
+
   const handleOpenMenu = () => {
     dispatch(show('menu'))
   }
+  const toggleTheme = () => {
+    dispatch(actions.toggleTheme())
+  }
 
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={theme === 'light' ? lightTheme : darkTheme}>
       <CssBaseline />
       <Dialogs />
       <Notifications notifications={notifications} />
@@ -76,16 +95,21 @@ const App = () => {
             </IconButton>
           </Grid>
           <Grid item>
+            <Tooltip title="Toggle theme">
+              <IconButton onClick={toggleTheme}>
+                {theme === 'light' ? 
+                  <Brightness4Icon fontSize="medium" /> : 
+                  <Brightness7Icon fontSize="medium" />}
+              </IconButton>
+            </Tooltip>
             <Link 
-              target="_blank"
-              rel="noopener"
               href="https://github.com/crvouga/connect-four" 
               underline="none" 
               color="inherit"
               >
-              <Tooltip title="Source Code">
+              <Tooltip title="GitHub repository">
                 <IconButton>
-                  <CodeIcon fontSize="large" />
+                  <GitHubIcon fontSize="medium" />
                 </IconButton>
               </Tooltip>
             </Link>

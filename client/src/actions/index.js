@@ -19,4 +19,5 @@ export default createActions({
   ENDED_ROOM: undefined,
   ROOM_ENDED: undefined,
   SOCKET_ACTION: undefined,
+  TOGGLE_THEME: undefined,
 })

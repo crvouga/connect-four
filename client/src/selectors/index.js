@@ -22,7 +22,11 @@ import {
   includes,
   __,
   curry,
+  pathOr,
+  tail,
 } from 'ramda'
+const pathOrTail = curry((keys, obj) =>
+  isEmpty(keys) ? undefined : pathOr(pathOrTail(tail(keys), obj), keys, obj))
 import {  
   COLUMN_COUNT, 
   ROW_COUNT, 
@@ -34,38 +38,34 @@ import {
 export const notifications = 
   prop('notifications')
 
-export const socket = 
-  prop('socket')
+export const theme =
+  pathOrTail(['settings', 'theme'])
 
-export const modal = 
-  prop('modal')
+export const columns =
+  pathOrTail(['game', 'columns'])
 
-export const game = 
-  prop('game')
+export const offlinePlayer =
+  pathOrTail(['game', 'offlinePlayer'])
   
-export const columns = state =>
-  propOr(path(['game', 'columns'], state), 'columns', state)
-
-export const offlinePlayer = state =>
-  propOr(path(['game', 'offlinePlayer'], state), 'offlinePlayer', state)
-
-export const opponentType = state =>
-  propOr(path(['game', 'opponentType'], state), 'opponentType', state)
+export const opponentType =
+  pathOrTail(['game', 'opponentType'])
 
 export const isSocketConnected =
-  path(['socket', 'isSocketConnected'])
+  pathOrTail(['game', 'isSocketConnected'])
 
-export const isSocketNotConnected =
-  createSelector(isSocketConnected, not)
+export const isSocketNotConnected = createSelector(
+  isSocketConnected, 
+  not
+)
 
 export const roomId =
-  path(['socket', 'roomId'])
+  pathOrTail(['game', 'roomId'])
 
 export const joinRoomError =
-  path(['socket', 'joinRoomError'])
+  pathOrTail(['game', 'joinRoomError'])
 
 export const isWaitingForRematch =
-  path(['socket', 'isWaitingForRematch'])
+  pathOrTail(['game', 'isWaitingForRematch'])
 
 
 export const consecutives = createSelector(

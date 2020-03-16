@@ -50,7 +50,7 @@ const Column = (props) => {
       />
   )
 }
-console.log(blue[700], blue[500])
+
 const Columns = () => {
   return (
     <React.Fragment>
