@@ -46,6 +46,7 @@ const initialState = {
   /* Socket */
   isSocketConnected: false,
   isWaitingForRematch: false,
+  isOpponentWaitingForRematch: false,
   roomId: undefined,
   joinRoomError: undefined,
 }
@@ -76,7 +77,7 @@ export const reducer = handleActions(
 
     [actions.rematch]: (state) =>
       pipe(
-        mergeLeft({columns: emptyColumns, isWaitingForRematch: false}),
+        mergeLeft({columns: emptyColumns, isWaitingForRematch: false, isOpponentWaitingForRematch: false}),
         evolve({
           offlinePlayer:
             cond([
@@ -92,6 +93,9 @@ export const reducer = handleActions(
         {
           [actions.dropDisc]: (state, {payload: {columnIndex}}) =>
             reducer(state, actions.dropDisc(PlayerType.Online, columnIndex)),
+          
+          [actions.requestRematch]:
+            mergeLeft({isOpponentWaitingForRematch: true}),
         },
         state,
       )(state, opponentAction),

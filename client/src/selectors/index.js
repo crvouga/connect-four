@@ -67,7 +67,9 @@ export const joinRoomError =
 export const isWaitingForRematch =
   pathOrTail(['game', 'isWaitingForRematch'])
 
-
+export const isOpponentWaitingForRematch =
+  pathOrTail(['game', 'isOpponentWaitingForRematch'])
+  
 export const consecutives = createSelector(
   columns,
   columns => {
@@ -222,9 +224,11 @@ export const isTurnOnline = createSelector(
 )
 
 export const isTurn = curry((playerType, state) =>
-  isGameNotOver(state) && currentPlayerType(state) === playerType)
+    isGameNotOver(state) 
+  && currentPlayerType(state) === playerType)
 
 export const isColumnFull = curry((columnIndex, state) =>
   length(prop(columnIndex, columns(state))) >= ROW_COUNT)
 
-export const isColumnNotFull = complement(isColumnFull)
+export const isColumnNotFull = 
+  complement(isColumnFull)

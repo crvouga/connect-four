@@ -19,7 +19,7 @@ import {
   all,
   race,
   takeLatest,
-  cancel,
+  delay,
 } from "@redux-saga/core/effects";
 import { 
   createActions 
@@ -28,61 +28,71 @@ import {
   show, 
   hide,
 } from 'redux-modal';
-import { 
-  success, 
-  error, 
-  info,
-} from 'react-notification-system-redux'
 import * as selectors  from '../selectors'
-import actions from '../actions'
 
-const position = 'bc'
+import actions, { enqueueSnackbar } from '../actions'
+
+const success = (payload) => enqueueSnackbar({
+  ...payload,
+  options: {
+    key: new Date().getTime() + Math.random(),
+    variant: "success",
+  }
+})
+
+const info = (payload) => enqueueSnackbar({
+  ...payload,
+  options: {
+    key: new Date().getTime() + Math.random(),
+    variant: "info",
+  }
+})
+
+const warning = (payload) => enqueueSnackbar({
+  ...payload,
+  options: {
+    key: new Date().getTime() + Math.random(),
+    variant: "warning",
+  }
+})
+
+const error = (payload) => enqueueSnackbar({
+  ...payload,
+  options: {
+    key: new Date().getTime() + Math.random(),
+    variant: "error",
+  }
+})
+
 const notifications = {
-  CONNECTION: success({
-    title: 'Server connection',
-    message: 'Online multiplayer is available',
-    position,
+  CONNECTION: info({
+    message: 'Server connected! Online multiplayer available',
   }),
-  DISCONNECTION: info({
-    title: 'Server disconnection',
-    message: 'Online multiplayer is unavailable',
-    position,
+  DISCONNECTION: warning({
+    message: 'Server disconnected. Online multiplayer unavailable',
   }),
   ROOM_ENDED: error({
-    title: `Opponent has lefted the game`,
-    position: 'bc',
+    message: `Opponent lefted game`,
   }),
-  ENDED_ROOM: info({
-    title: `You have lefted the game`,
-    position,
+  ENDED_ROOM: warning({
+    message: `You lefted game`,
   }),
   STARTED_ROOM: info({
-    title: `Started a game`,
-    message: `Waiting for an opponent to join`,
-    position,
+    message: `You started a game. Waiting for someone to join`,
   }),
   JOINED_ROOM: success({
-    title: `You joined a game!`,
-    message: `Opponent's turn`,
-    position,
+    message: `You joined a game! Opponent's turn`,
   }),
   ROOM_JOINED: success({
-    title: `Opponent joined your game!`,
-    message: `Your turn`,
-    position,
+    message: `Someone joined your game! Your turn`,
   }),
   REMATCH: success({
-    title: 'Rematch!',
-    message: `Winner goes first`,
-    position,
-  }),
-  SOCKET_REQUEST_RESTART_GAME: info({
-    title: `Opponent wants to rematch`,
-    position,
+    message: `Rematch!`,
   }),
 }
 
 function* notificationsSaga() {
+
   yield takeEvery(keys(notifications), function* (action) {
     yield put(prop(action.type, notifications))
   })
@@ -134,8 +144,7 @@ function* inGameSaga(socket) {
             if(socketAction.type === 'REQUEST_REMATCH') {
               if(not(yield select(selectors.isWaitingForRematch))) {
                 yield put(info({
-                  title: 'Opponent wants a rematch!',
-                  position,
+                  message: 'Opponent wants a rematch!',
                 }))
               }
               break;

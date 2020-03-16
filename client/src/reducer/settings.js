@@ -13,6 +13,6 @@ export const reducer = handleActions(
     [actions.toggleTheme]: evolve({theme: prop(__, {light: 'dark', dark: 'light'})})
   },
   {
-    theme: 'light'
+    theme: 'dark'
   }
 )

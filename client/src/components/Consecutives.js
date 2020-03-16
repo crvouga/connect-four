@@ -6,7 +6,7 @@ import Transition from 'react-transition-group/Transition'
 import TransitionGroup from 'react-transition-group/TransitionGroup'
 import gsap from "gsap"
 import { 
-  makeStyles 
+  makeStyles, useTheme 
 } from '@material-ui/core';
 import blue from '@material-ui/core/colors/blue';
 import {
@@ -23,7 +23,7 @@ import * as selectors from '../selectors';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    stroke: 'url(#consecutive)',
+    stroke: theme.palette.text.secondary,
     strokeWidth: 150,
     fill: 'transparent',
     pointerEvents: 'none',
@@ -101,19 +101,11 @@ const Consecutive = (props) => {
 const Consecutives = () => {
   const consecutives = useSelector(selectors.winningConsecutives)
   return (
-    <React.Fragment>
-      <defs>
-        <radialGradient id='consecutive' gradientTransform="rotate(90)">
-          <stop offset="0%" stopColor={blue[700]}/>
-          <stop offset="100%" stopColor={blue[900]}/>
-        </radialGradient>
-      </defs>
-      <TransitionGroup component="g">
-        {consecutives.map((consecutive) => (
-          <Consecutive key={consecutive} consecutive={consecutive}/>
-        ))}
-      </TransitionGroup>
-    </React.Fragment>
+    <TransitionGroup component="g">
+      {consecutives.map((consecutive) => (
+        <Consecutive key={consecutive} consecutive={consecutive}/>
+      ))}
+    </TransitionGroup>
   )
 }
 

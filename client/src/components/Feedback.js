@@ -28,12 +28,12 @@ const DiscIcon = (props) =>
 const useStyles = makeStyles(theme => ({
   
   [Player.One]: {
-    color: theme[Player.One],
+    color: theme.palette.error.main,
     fontSize: 'inherit',
   },
 
   [Player.Two]: {
-    color: theme[Player.Two],
+    color: theme.palette.warning.light,
     fontSize: 'inherit',
   },
 
@@ -128,8 +128,9 @@ const Feedback = () => {
             </>}
           </> 
       }
-      <LinearProgress 
-        color="primary"
+      <LinearProgress
+        
+        color={isTurnOffline || isGameOver ? "" : "secondary"} 
         variant={isTurnOffline || isGameOver ? "determinate" : "query"} 
         value={100}
         />

@@ -25,6 +25,8 @@ import PersonIcon from '@material-ui/icons/Person'
 import PublicIcon from '@material-ui/icons/Public'
 import Box from '@material-ui/core/Box'
 import Divider from '@material-ui/core/Divider'
+import Typography from '@material-ui/core/Typography';
+
 import {
   not,
   isNil,
@@ -197,6 +199,7 @@ const MenuDialog = connectModal({name: 'menu', destroyOnHide: false})(props => {
 
   return (
     <Dialog open={isOpen} onClose={onClose} direction="right" TransitionComponent={SlideRight}>
+      <Typography>
       <List>
         <ListSubheader>
           <ListItemText primary="Play against a friend"/>
@@ -251,6 +254,7 @@ const MenuDialog = connectModal({name: 'menu', destroyOnHide: false})(props => {
         </ListItem>
 
       </List>
+      </Typography>
     </Dialog>
   )
 })

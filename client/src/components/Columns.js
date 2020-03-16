@@ -17,6 +17,7 @@ import {
 } from '../constants'
 import actions from '../actions'
 import * as selectors from '../selectors'
+import { useTheme } from '@material-ui/styles';
 
 const useStyles = makeStyles(theme => ({
   column: { 
@@ -52,6 +53,8 @@ const Column = (props) => {
 }
 
 const Columns = () => {
+  const theme = useTheme()
+  console.log({theme})
   return (
     <React.Fragment>
       <defs>
@@ -63,8 +66,8 @@ const Columns = () => {
           <rect width="10" height="60" fill="url(#cell-pattern)"></rect>
         </mask>
         <linearGradient id='column' gradientTransform="rotate(90)">
-          <stop offset="0%" stopColor={blue[700]}/>
-          <stop offset="100%" stopColor={blue[500]}/>
+          <stop offset="0%" stopColor={theme.palette.info.dark}/>
+          <stop offset="100%" stopColor={theme.palette.info.main}/>
         </linearGradient>
       </defs>
       {times((columnIndex) => 

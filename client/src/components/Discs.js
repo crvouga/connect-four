@@ -14,6 +14,7 @@ import * as selectors from '../selectors'
 import red from '@material-ui/core/colors/red'
 import yellow from '@material-ui/core/colors/yellow'
 import grey from '@material-ui/core/colors/grey'
+import { useTheme } from '@material-ui/styles';
 
 const discEnter = (columnIndex, rowIndex) => node => {
   gsap.fromTo(
@@ -34,18 +35,19 @@ const discExit = (columnIndex) => node => {
 
 const Discs = () => {
   const columns = useSelector(selectors.columns)
+  const theme = useTheme()
 
   return (
     <>
       <defs>
-        <linearGradient id={Player.One} gradientTransform="rotate(90)">
-          <stop offset="0%" stopColor={red[800]}/>
-          <stop offset="100%" stopColor={red[400]}/>
-        </linearGradient>
-        <linearGradient id={Player.Two} gradientTransform="rotate(90)">
-          <stop offset="0%" stopColor={yellow[800]}/>
-          <stop offset="100%" stopColor={yellow[400]}/>
-        </linearGradient>
+        <radialGradient id={Player.One} >
+          <stop offset="0%" stopColor={theme.palette.error.main}/>
+          <stop offset="100%" stopColor={theme.palette.error.dark}/>
+        </radialGradient>
+        <radialGradient id={Player.Two} >
+          <stop offset="50%" stopColor={theme.palette.warning.light}/>
+          <stop offset="100%" stopColor={theme.palette.warning.main}/>
+        </radialGradient>
       </defs>
       <TransitionGroup component="g" transform="translate(0.5, 0.5)">
         {columns.map((column, columnIndex) => column.map((player, rowIndex) =>

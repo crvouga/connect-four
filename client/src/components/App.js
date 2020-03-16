@@ -1,6 +1,4 @@
-import React, {
-  useRef,
-} from 'react';
+import React from 'react';
 import { 
   useSelector,
   useDispatch,
@@ -8,31 +6,27 @@ import {
 import CssBaseline from '@material-ui/core/CssBaseline'
 import Container from '@material-ui/core/Container'
 import Grid from '@material-ui/core/Grid'
+import Tooltip from '@material-ui/core/Tooltip'
 import createMuiTheme from '@material-ui/core/styles/createMuiTheme'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import {
   ThemeProvider
 } from '@material-ui/core/styles'
-import red from '@material-ui/core/colors/red'
-import yellow from '@material-ui/core/colors/yellow'
-import blue from '@material-ui/core/colors/blue'
+import { 
+  SnackbarProvider 
+} from 'notistack';
 import IconButton from '@material-ui/core/IconButton'
 import MenuIcon from '@material-ui/icons/Menu'
 import GitHubIcon from '@material-ui/icons/GitHub';
+import Brightness4Icon from '@material-ui/icons/Brightness4';
+import Brightness7Icon from '@material-ui/icons/Brightness7';
 import Link from '@material-ui/core/Link'
-import Tooltip from '@material-ui/core/Tooltip';
-import Box from '@material-ui/core/Box';
-import Typography from '@material-ui/core/Typography';
-
-import { 
-  Player 
-} from "../constants";
 import * as selectors from '../selectors'
 import GameButton from './Button'
 import Feedback from './Feedback'
 import Board from './Board'
 import Dialogs from './Dialogs'
-import Notifications from 'react-notification-system-redux'
+import Notifier from './Notifier'
 import {
   show
 } from 'redux-modal'
@@ -42,21 +36,14 @@ import actions from '../actions'
 const lightTheme = createMuiTheme({
   palette: {
     type: 'light',
-    primary: blue,
   },
-  [Player.One]: red[600],
-  [Player.Two]: yellow[600],
 })
 
 const darkTheme = createMuiTheme({
   palette: {
     type: 'dark',
-    primary: blue,
   },
-  [Player.One]: red[600],
-  [Player.Two]: yellow[600],
 })
-
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -64,15 +51,25 @@ const useStyles = makeStyles(theme => ({
     marginTop: theme.spacing(1),
     padding: 0,
   },
+  success: {
+    backgroundColor: theme.palette.success.main,
+  },
+  error: {
+    backgroundColor: theme.palette.error.main,
+  },
+  warning: {
+    backgroundColor: theme.palette.warning.main,
+  },
+  info: {
+    backgroundColor: theme.palette.info.main,
+  },
 }))
 
-import Brightness4Icon from '@material-ui/icons/Brightness4';
-import Brightness7Icon from '@material-ui/icons/Brightness7';
+
 
 const App = () => {
   const classes = useStyles()
   const dispatch = useDispatch()
-  const notifications = useSelector(selectors.notifications)
   const theme = useSelector(selectors.theme)
 
   const handleOpenMenu = () => {
@@ -84,41 +81,55 @@ const App = () => {
 
   return (
     <ThemeProvider theme={theme === 'light' ? lightTheme : darkTheme}>
-      <CssBaseline />
-      <Dialogs />
-      <Notifications notifications={notifications} />
-      <Container maxWidth="xs" className={classes.root} >
-        <Grid container justify="space-between">
-          <Grid item>
-            <IconButton onClick={handleOpenMenu}>
-              <MenuIcon fontSize="large"/>
-            </IconButton>
-          </Grid>
-          <Grid item>
-            <Tooltip title="Toggle theme">
-              <IconButton onClick={toggleTheme}>
-                {theme === 'light' ? 
-                  <Brightness4Icon fontSize="medium" /> : 
-                  <Brightness7Icon fontSize="medium" />}
+        <CssBaseline />
+        <SnackbarProvider 
+          disableWindowBlurListener 
+          preventDuplicate 
+          autoHideDuration={3000}
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'center', }}
+          classes={{
+            variantSuccess: classes.success,
+            variantError: classes.error,
+            variantWarning: classes.warning,
+            variantInfo: classes.info,
+          }}
+          >
+
+        <Container maxWidth="xs" className={classes.root} >
+          <Dialogs />
+          <Notifier />
+          <Grid container justify="space-between">
+            <Grid item>
+              <IconButton onClick={handleOpenMenu}>
+                <MenuIcon fontSize="large"/>
               </IconButton>
-            </Tooltip>
-            <Link 
-              href="https://github.com/crvouga/connect-four" 
-              underline="none" 
-              color="inherit"
-              >
-              <Tooltip title="GitHub repository">
-                <IconButton>
-                  <GitHubIcon fontSize="medium" />
+            </Grid>
+            <Grid item>
+              <Tooltip title="Toggle theme">
+                <IconButton onClick={toggleTheme}>
+                  {theme === 'light' ? 
+                    <Brightness4Icon fontSize="medium" /> : 
+                    <Brightness7Icon fontSize="medium" />}
                 </IconButton>
               </Tooltip>
-            </Link>
+              <Link 
+                href="https://github.com/crvouga/connect-four" 
+                underline="none" 
+                color="inherit"
+                >
+                <Tooltip title="GitHub repository">
+                  <IconButton>
+                    <GitHubIcon fontSize="medium" />
+                  </IconButton>
+                </Tooltip>
+              </Link>
+            </Grid>
           </Grid>
-        </Grid>
-        <Feedback />
-        <Board />
-        <GameButton />
-      </Container>
+          <Feedback />
+          <Board />
+          <GameButton />
+        </Container>
+      </SnackbarProvider>
     </ThemeProvider>
   )
 }

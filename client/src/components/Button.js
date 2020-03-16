@@ -21,6 +21,7 @@ const GameButton = () => {
   const isGameOver = useSelector(selectors.isGameOver)
   const isGameStart = useSelector(selectors.isGameStart)
   const isWaitingForRematch = useSelector(selectors.isWaitingForRematch)
+  const isOpponentWaitingForRematch = useSelector(selectors.isOpponentWaitingForRematch)
   const offlinePlayer = useSelector(selectors.offlinePlayer)
   const dispatch = useDispatch()
 
@@ -43,7 +44,7 @@ const GameButton = () => {
         disabled={offlinePlayer === Player.Two} 
         size="large" 
         fullWidth 
-        color='primary' 
+        color='secondary' 
         onClick={handleChangeTeam}
         >
         <Box fontWeight="bold" fontSize="large">
@@ -54,7 +55,8 @@ const GameButton = () => {
       not(isOpponentOnline) && not(isGameStart) ?
       <Button 
         size="large" 
-        fullWidth color='primary' 
+        fullWidth 
+        color={'secondary'} 
         variant= {isGameOver ? 'contained' : 'text'} 
         onClick={handleRestartGame}
         >
@@ -68,15 +70,16 @@ const GameButton = () => {
         <Button 
           size="large" 
           disabled={isWaitingForRematch} 
-          fullWidth color='primary' 
+          fullWidth 
+          color='secondary' 
           variant='contained' 
           onClick={handleRematch}
           >
           <Box fontWeight="bold" fontSize="large">
-            {isWaitingForRematch ? 'Waiting for opponent...' : 'Play Again'}
+            {isWaitingForRematch ? 'Waiting for opponent...' : isOpponentWaitingForRematch ? 'Rematch?' : 'Play Again'}
           </Box>
         </Button>
-        {isWaitingForRematch && <LinearProgress variant='query' />}
+        {isWaitingForRematch && <LinearProgress color='secondary' variant='query' />}
       </> :
 
       <></>}
