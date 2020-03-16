@@ -10,7 +10,7 @@ import {
   all,
 } from "@redux-saga/core/effects";
 import { 
-  PlayerType, WIN_COUNT, 
+  PlayerType, 
 } from "../constants";
 import * as selectors from "../selectors";
 import actions from "../actions";
@@ -20,11 +20,11 @@ import {
 } from 'ramda'
 
 const scoreFunction = (state, callback) => {
-  let score = 1
+  let score = 0
   for(const consecutive of selectors.consecutives(state)) {
     const player = path(consecutive[0], state.columns)
-    if(player === state.current && consecutive.length >= WIN_COUNT) {
-      score *= 10
+    if(player === state.current) {
+      score += consecutive.length ** consecutive.length
     }
   }
   return callback(score)

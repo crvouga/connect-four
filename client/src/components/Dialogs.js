@@ -199,7 +199,6 @@ const MenuDialog = connectModal({name: 'menu', destroyOnHide: false})(props => {
 
   return (
     <Dialog open={isOpen} onClose={onClose} direction="right" TransitionComponent={SlideRight}>
-      <Typography>
       <List>
         <ListSubheader>
           <ListItemText primary="Play against a friend"/>
@@ -254,7 +253,6 @@ const MenuDialog = connectModal({name: 'menu', destroyOnHide: false})(props => {
         </ListItem>
 
       </List>
-      </Typography>
     </Dialog>
   )
 })
