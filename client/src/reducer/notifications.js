@@ -1,31 +1,28 @@
-import { 
-    handleActions 
-} from 'redux-actions'
-import { 
-    ENQUEUE_SNACKBAR, 
-    CLOSE_SNACKBAR, 
-    REMOVE_SNACKBAR 
-} from '../actions'
-import { 
-    append,
-    map,
-    filter,
-} from 'ramda';
+import { combineActions, handleActions } from "redux-actions";
+import actions, { CLOSE_SNACKBAR, REMOVE_SNACKBAR } from "../actions";
+import { append, map, filter } from "ramda";
 
 export const reducer = handleActions(
-    {
-        [ENQUEUE_SNACKBAR]: (state, action) =>
-            append({key: action.key, ...action.notification}, state),
+  {
+    [combineActions(
+      actions.success,
+      actions.info,
+      actions.error,
+      actions.warning
+    )]: (state, action) =>
+      append(action.payload, state),
 
-        [CLOSE_SNACKBAR]: (state, action) =>
-            map(notification => (
-                (action.dismissAll || notification.key === action.key)
-                    ? { ...notification, dismissed: true }
-                    : { ...notification }),
-                state),
+    [CLOSE_SNACKBAR]: (state, action) =>
+      map(
+        notification =>
+          action.dismissAll || notification.key === action.key
+            ? { ...notification, dismissed: true }
+            : { ...notification },
+        state
+      ),
 
-        [REMOVE_SNACKBAR]: (state, action) =>
-            filter(notification => notification.key !== action.key,  state),      
-    },
-    []
-)
+    [REMOVE_SNACKBAR]: (state, action) =>
+      filter(notification => notification.key !== action.key, state)
+  },
+  []
+);

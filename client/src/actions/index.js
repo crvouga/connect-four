@@ -1,10 +1,36 @@
-import { createActions } from 'redux-actions'
+import { createActions } from "redux-actions";
+
+export const ENQUEUE_SNACKBAR = "ENQUEUE_SNACKBAR";
+export const CLOSE_SNACKBAR = "CLOSE_SNACKBAR";
+export const REMOVE_SNACKBAR = "REMOVE_SNACKBAR";
+
+export const enqueueSnackbar = notification => {
+  const key = notification.options && notification.options.key;
+  return {
+    ...notification,
+    key: key || new Date().getTime() + Math.random()
+  };
+};
+
+export const closeSnackbar = key => ({
+  type: CLOSE_SNACKBAR,
+  dismissAll: !key, // dismiss all if no key has been defined
+  key
+});
+
+export const removeSnackbar = key => ({
+  type: REMOVE_SNACKBAR,
+  key
+});
 
 export default createActions({
-  DROP_DISC: (playerType, columnIndex) => ({ playerType, columnIndex,}),
+  /* Game */
+  DROP_DISC: (playerType, columnIndex) => ({ playerType, columnIndex }),
   RESTART_GAME: undefined,
   CHANGE_TEAM: undefined,
   CHANGE_OPPONENT: playerType => ({ playerType }),
+
+  /* Socket */
   REMATCH: undefined,
   START_ROOM: undefined,
   JOIN_ROOM: undefined,
@@ -20,32 +46,38 @@ export default createActions({
   ROOM_ENDED: undefined,
   SOCKET_ACTION: undefined,
   TOGGLE_THEME: undefined,
-})
 
-
-export const ENQUEUE_SNACKBAR = 'ENQUEUE_SNACKBAR';
-export const CLOSE_SNACKBAR = 'CLOSE_SNACKBAR';
-export const REMOVE_SNACKBAR = 'REMOVE_SNACKBAR';
-
-export const enqueueSnackbar = (notification) => {
-    const key = notification.options && notification.options.key;
-
-    return {
-        type: ENQUEUE_SNACKBAR,
-        notification: {
-            ...notification,
-            key: key || new Date().getTime() + Math.random(),
-        },
-    };
-};
-
-export const closeSnackbar = key => ({
-    type: CLOSE_SNACKBAR,
-    dismissAll: !key, // dismiss all if no key has been defined
-    key,
-});
-
-export const removeSnackbar = key => ({
-    type: REMOVE_SNACKBAR,
-    key,
+  /* notifications */
+  SUCCESS: payload =>
+    enqueueSnackbar({
+      ...payload,
+      options: {
+        key: new Date().getTime() + Math.random(),
+        variant: "success"
+      }
+    }),
+  INFO: payload =>
+    enqueueSnackbar({
+      ...payload,
+      options: {
+        key: new Date().getTime() + Math.random(),
+        variant: "info"
+      }
+    }),
+  WARNING: payload =>
+    enqueueSnackbar({
+      ...payload,
+      options: {
+        key: new Date().getTime() + Math.random(),
+        variant: "warning"
+      }
+    }),
+  ERROR: payload =>
+    enqueueSnackbar({
+      ...payload,
+      options: {
+        key: new Date().getTime() + Math.random(),
+        variant: "error"
+      }
+    })
 });

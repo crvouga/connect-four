@@ -187,7 +187,7 @@ const computerPlayerTypes = [
   PlayerType.HardComputer,
 ]
 
-const isComputerPlayerType =
+export const isComputerPlayerType =
   includes(__, computerPlayerTypes)
 
 export const isOpponentComputer = createSelector(
