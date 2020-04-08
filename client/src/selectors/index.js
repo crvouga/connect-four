@@ -41,6 +41,9 @@ export const notifications =
 export const theme =
   pathOrTail(['settings', 'theme'])
 
+export const isConfetti =
+  pathOrTail(['settings', 'isConfetti'])
+
 export const columns =
   pathOrTail(['game', 'columns'])
 

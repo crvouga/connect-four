@@ -45,8 +45,10 @@ export default createActions({
   ENDED_ROOM: undefined,
   ROOM_ENDED: undefined,
   SOCKET_ACTION: undefined,
-  TOGGLE_THEME: undefined,
 
+  /* settings */
+  TOGGLE_THEME: undefined,
+  TOGGLE_CONFETTI: undefined,
   /* notifications */
   SUCCESS: payload =>
     enqueueSnackbar({
