@@ -21,8 +21,6 @@ import actions from "../actions";
 
 const { success, info, warning, error } = actions;
 
-console.log({success, info, warning, error})
-
 const notifications = {
   CONNECTION: success({
     message: "Server connected! 😊"

@@ -11,7 +11,7 @@ export default function*() {
     } = action;
 
     const playerTypeEmoji = {
-      [PlayerType.EasyComputer]: "🥔",
+      [PlayerType.EasyComputer]: "📱",
       [PlayerType.MediumComputer]: "🖥️",
       [PlayerType.HardComputer]: "🤖",
       [PlayerType.Offline]: "🙋‍♂",

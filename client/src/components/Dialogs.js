@@ -25,7 +25,6 @@ import Brightness4Icon from "@material-ui/icons/Brightness4";
 import Brightness7Icon from "@material-ui/icons/Brightness7";
 import Link from "@material-ui/core/Link";
 import Switch from "@material-ui/core/Switch";
-
 import { not, isNil, prop, drop } from "ramda";
 import { connectModal, hide, show } from "redux-modal";
 import * as selectors from "../selectors";
@@ -33,6 +32,7 @@ import actions from "../actions";
 import { PlayerType } from "../constants";
 import Slide from "@material-ui/core/Slide";
 import Zoom from "@material-ui/core/Zoom";
+import { Typography } from "@material-ui/core";
 
 const SlideRight = React.forwardRef((props, ref) => {
   return <Slide direction="right" ref={ref} {...props} />;
@@ -198,17 +198,25 @@ const SettingsDialog = connectModal({ name: "settings", destroyOnHide: false })(
             <ListItemText primary="Settings" />
           </ListSubheader>
 
-          <ListItem onClick={toggleTheme}>
-            <Switch checked={theme === "light"} />
+
+          <ListItem button onClick={toggleConfetti}>
+            <ListItemIcon>
+              <Switch checked={isConfetti} />
+            </ListItemIcon>
             <ListItemText
-              primary={theme === "light" ? "Light Theme" : "Dark Theme"}
+              primary="Toggle Confetti"
+              secondary={isConfetti ? "Confetti On" : "Confetti Off"}
             />
           </ListItem>
 
-          <ListItem onClick={toggleConfetti}>
-            <Switch checked={isConfetti} />
+
+          <ListItem button onClick={toggleTheme}>
+            <ListItemIcon>
+              {theme === "light" ? <Brightness4Icon /> : <Brightness7Icon />}
+            </ListItemIcon>
             <ListItemText
-              primary={isConfetti ? "Confetti On" : "Confetti Off"}
+              primary="Toggle Theme"
+              secondary={theme === "light" ? "Light Theme" : "Dark Theme"}
             />
           </ListItem>
 
@@ -271,6 +279,12 @@ const MenuDialog = connectModal({ name: "menu", destroyOnHide: false })(
       >
         <List>
           <ListSubheader>
+            <ListItemText primary="New Game" />
+          </ListSubheader>
+
+          <Divider />
+
+          <ListSubheader>
             <ListItemText primary="Play against a friend" />
           </ListSubheader>
 
@@ -302,8 +316,6 @@ const MenuDialog = connectModal({ name: "menu", destroyOnHide: false })(
             </ListItemIcon>
             <ListItemText primary="Offline" />
           </ListItem>
-
-          <Divider />
 
           <ListSubheader>
             <ListItemText primary="Play against a computer" />

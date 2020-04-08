@@ -1,5 +1,5 @@
 import { handleActions } from "redux-actions";
-import { evolve, prop, __ , not} from "ramda";
+import { evolve, prop, __, not } from "ramda";
 import actions from "../actions";
 
 export const reducer = handleActions(

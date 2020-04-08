@@ -49,6 +49,7 @@ export default createActions({
   /* settings */
   TOGGLE_THEME: undefined,
   TOGGLE_CONFETTI: undefined,
+  
   /* notifications */
   SUCCESS: payload =>
     enqueueSnackbar({
