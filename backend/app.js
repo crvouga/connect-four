@@ -1,15 +1,20 @@
+const env = process.env.NODE_ENV || "development";
 const express = require("express");
 const app = express();
 const http = require("http");
 const server = http.Server(app);
 const io = require("socket.io")(server);
 
-const env = process.env.NODE_ENV || "development";
 // CORS
 //SOURCE: https://stackoverflow.com/questions/24058157/socket-io-node-js-cross-origin-request-blocked
+const cors = require("cors");
+app.use(cors({ origin: true }));
 io.set("origins", "*:*");
 
-const PORT = process.env.PORT || 8080;
+app.get("/", (req, res) => {
+  res.json({ message: "hello from backend" });
+});
+const PORT = process.env.PORT || 9000;
 server.listen(PORT, () => {
   console.log("Listening on port", PORT);
 });

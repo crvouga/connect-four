@@ -143,7 +143,7 @@ const IS_IN_DEVELOPMENT_MODE =
   !process.env.NODE_ENV || process.env.NODE_ENV === "development";
 
 const socketURL = IS_IN_DEVELOPMENT_MODE
-  ? "http://localhost:8080/"
+  ? "http://localhost:9000/"
   : "https://connect-four-backend.herokuapp.com/";
 
 function* socketSaga() {
