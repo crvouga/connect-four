@@ -19,6 +19,9 @@ const io = require("socket.io")(server, {
   },
 });
 
+const cors = require("cors");
+app.use(cors());
+
 const env = process.env.NODE_ENV || "development";
 
 // CORS
