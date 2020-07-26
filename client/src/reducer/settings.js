@@ -5,12 +5,12 @@ import actions from "../actions";
 export const reducer = handleActions(
   {
     [actions.toggleTheme]: evolve({
-      theme: prop(__, { light: "dark", dark: "light" })
+      theme: prop(__, { light: "dark", dark: "light" }),
     }),
-    [actions.toggleConfetti]: evolve({ isConfetti: not })
+    [actions.toggleConfetti]: evolve({ isConfetti: not }),
   },
   {
     theme: "dark",
-    isConfetti: true
+    isConfetti: false,
   }
 );
