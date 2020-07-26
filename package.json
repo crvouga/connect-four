@@ -4,6 +4,7 @@
   "description": "![icon](client/public/faviconTemplate.svg) # Connect Four An implementation of the game Connect Four. Features include an AI to play against and online multiplayer so you can play with your friends. The game uses React and Redux on the frontend and Socket.IO on the backend. ## Live site: https://vouga-connect-four.herokuapp.com/ ![](preview.gif)",
   "main": "index.js",
   "scripts": {
+    "start": "cd backend && npm run start",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

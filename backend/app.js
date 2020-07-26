@@ -1,27 +1,39 @@
+const PORT = process.env.PORT || 9000;
 const env = process.env.NODE_ENV || "development";
+
 const express = require("express");
 const app = express();
-const http = require("http");
-const server = http.Server(app);
-const io = require("socket.io")(server, { origins: "*:*" });
+const server = app.listen(PORT, () => {
+  console.log("listening on port ", PORT);
+});
+const clientOrigin = "https://connect-four-in-a-row.web.app/";
+const io = require("socket.io")(server, {
+  origins: "*:*",
+  handlePreflightRequest: (req, res) => {
+    const headers = {
+      "Access-Control-Allow-Headers": "Content-Type, Authorization",
+      "Access-Control-Allow-Credentials": true,
+      "Access-Control-Allow-Origin": req.headers.origin,
+    };
+    res.writeHead(200, headers);
+    res.end();
+  },
+});
 
-// CORS
-//SOURCE: https://stackoverflow.com/questions/24058157/socket-io-node-js-cross-origin-request-blocked
-const cors = require("cors");
-app.use(cors({ origin: true }));
-io.set("origins", "*:*");
-
+const sockets = {};
 app.get("/", (req, res) => {
-  res.json({ message: "hello from backend" });
-});
-const PORT = process.env.PORT || 9000;
-server.listen(PORT, () => {
-  console.log("Listening on port", PORT);
+  res.json({ message: "hello from backend", sockets });
 });
 
-/* 
-  Socket
-*/
+/**
+ *
+ *
+ *
+ * Socket
+ *
+ *
+ *
+ * */
 
 const randomDigit = () => Math.floor(Math.random() * 10);
 
@@ -89,7 +101,11 @@ const socketActionHandler = (socket) => (clientReduxAction) => {
 };
 
 const connectionHandler = (socket) => {
-  console.log("socket connected!");
+  sockets[socket.id] = socket.id;
+  socket.on("disconnect", () => {
+    delete sockets[socket.id];
+  });
+
   socket.on("startRoom", startRoomHandler(socket));
   socket.on("joinRoom", joinRoomHandler(socket));
   socket.on("leaveRoom", leaveRoomHandler(socket));

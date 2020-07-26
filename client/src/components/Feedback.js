@@ -13,7 +13,7 @@ import { Player } from "../constants";
 import * as selectors from "../selectors";
 import clsx from "clsx";
 
-const DiscIcon = props => (
+const DiscIcon = (props) => (
   <SvgIcon {...props}>
     <svg viewBox={[0, 0, 2, 2]}>
       <circle cx={1} cy={1} r={1} />
@@ -21,36 +21,36 @@ const DiscIcon = props => (
   </SvgIcon>
 );
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   [Player.One]: {
     color: theme.palette.error.main,
-    fontSize: "inherit"
+    fontSize: "inherit",
   },
 
   [Player.Two]: {
     color: theme.palette.warning.light,
-    fontSize: "inherit"
+    fontSize: "inherit",
   },
 
   feedback: {
     textAlign: "center",
     fontSize: "large",
     fontWeight: "bold",
-    color: theme.palette.text.secondary
+    color: theme.palette.text.secondary,
   },
 
   blinking: {
     animationName: "$blinker",
     animationDuration: "1s",
     animationTimingFunction: "linear",
-    animationIterationCount: "infinite"
+    animationIterationCount: "infinite",
   },
 
   "@keyframes blinker": {
     "0%": { opacity: 1 },
     "50%": { opacity: 0.3 },
-    "100%": { opacity: 1 }
-  }
+    "100%": { opacity: 1 },
+  },
 }));
 
 const Feedback = () => {
@@ -65,12 +65,12 @@ const Feedback = () => {
   const winner = useSelector(selectors.winner);
   const loser = useSelector(selectors.loser);
   const classes = useStyles({
-    player: currentPlayer
+    player: currentPlayer,
   });
   return (
     <Box
       className={clsx(classes.feedback, {
-        [classes.blinking]: !isGameOver && isOpponentOnline && isTurnOffline
+        [classes.blinking]: !isGameOver && isOpponentOnline && isTurnOffline,
       })}
     >
       {isWin ? (
@@ -115,7 +115,7 @@ const Feedback = () => {
         </>
       )}
       <LinearProgress
-        color={isTurnOffline || isGameOver ? "" : "secondary"}
+        color={isTurnOffline || isGameOver ? undefined : "secondary"}
         variant={isTurnOffline || isGameOver ? "determinate" : "query"}
         value={100}
       />
