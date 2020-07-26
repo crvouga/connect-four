@@ -1,3 +1,5 @@
+.firebase/
+build/
 # Logs
 logs
 *.log
