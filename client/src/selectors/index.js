@@ -1,202 +1,149 @@
-import { 
-  createSelector 
-} from 'reselect'
+import * as R from "ramda";
+import { createSelector } from "reselect";
 import {
-  prop,
-  propOr,
-  path,
-  not,
-  compose,
-  length,
-  flatten,
-  pipe,
-  modulo,
-  equals,
-  ifElse,
-  always,
-  filter,
-  lte,
-  complement,
-  isEmpty,
-  or,
-  includes,
-  __,
-  curry,
-  pathOr,
-  tail,
-} from 'ramda'
-const pathOrTail = curry((keys, obj) =>
-  isEmpty(keys) ? undefined : pathOr(pathOrTail(tail(keys), obj), keys, obj))
-import {  
-  COLUMN_COUNT, 
-  ROW_COUNT, 
-  WIN_COUNT, 
-  Player, 
-  PlayerType 
-} from '../constants';
+  COLUMN_COUNT,
+  Player,
+  PlayerType,
+  ROW_COUNT,
+  WIN_COUNT,
+} from "../constants";
+const pathOrTail = R.curry((keys, obj) =>
+  R.isEmpty(keys)
+    ? undefined
+    : R.pathOr(pathOrTail(R.tail(keys), obj), keys, obj)
+);
 
-export const notifications = 
-  prop('notifications')
+export const notifications = R.prop("notifications");
 
-export const theme =
-  pathOrTail(['settings', 'theme'])
+export const theme = pathOrTail(["settings", "theme"]);
 
-export const isConfetti =
-  pathOrTail(['settings', 'isConfetti'])
+export const isConfetti = pathOrTail(["settings", "isConfetti"]);
 
-export const columns =
-  pathOrTail(['game', 'columns'])
+export const columns = pathOrTail(["game", "columns"]);
 
-export const offlinePlayer =
-  pathOrTail(['game', 'offlinePlayer'])
-  
-export const opponentType =
-  pathOrTail(['game', 'opponentType'])
+export const offlinePlayer = pathOrTail(["game", "offlinePlayer"]);
 
-export const isSocketConnected =
-  pathOrTail(['game', 'isSocketConnected'])
+export const opponentType = pathOrTail(["game", "opponentType"]);
 
-export const isSocketNotConnected = createSelector(
-  isSocketConnected, 
-  not
-)
+export const isSocketConnected = pathOrTail(["game", "isSocketConnected"]);
 
-export const roomId =
-  pathOrTail(['game', 'roomId'])
+export const isSocketNotConnected = createSelector(isSocketConnected, R.not);
 
-export const joinRoomError =
-  pathOrTail(['game', 'joinRoomError'])
+export const roomId = pathOrTail(["game", "roomId"]);
 
-export const isWaitingForRematch =
-  pathOrTail(['game', 'isWaitingForRematch'])
+export const joinRoomError = pathOrTail(["game", "joinRoomError"]);
 
-export const isOpponentWaitingForRematch =
-  pathOrTail(['game', 'isOpponentWaitingForRematch'])
-  
-export const consecutives = createSelector(
-  columns,
-  columns => {
-    const consecutives = []
-    const visited = new Set()
-    for(let i = 0; i < columns.length; i++) {
-      for(let j = 0; j < columns[i].length; j++) {
-        for(const [di, dj] of [[1, 1], [1, -1], [1, 0], [0, 1]]) {
-          if(visited.has(""+di+dj+i+j)) {
-            continue
-          }
-          const consecutive = []
-          let ii = i, jj = j
-          while(columns[i][j] === (columns[ii]||[])[jj]) {
-            visited.add(""+di+dj+ii+jj)
-            consecutive.push([ii, jj])
-            ii += di
-            jj += dj
-          }
-          if(consecutive.length >= 2) {
-            consecutives.push(consecutive)
-          }
+export const isWaitingForRematch = pathOrTail(["game", "isWaitingForRematch"]);
+
+export const isOpponentWaitingForRematch = pathOrTail([
+  "game",
+  "isOpponentWaitingForRematch",
+]);
+
+export const consecutives = createSelector(columns, (columns) => {
+  const consecutives = [];
+  const visited = new Set();
+  for (let i = 0; i < columns.length; i++) {
+    for (let j = 0; j < columns[i].length; j++) {
+      for (const [di, dj] of [
+        [1, 1],
+        [1, -1],
+        [1, 0],
+        [0, 1],
+      ]) {
+        if (visited.has("" + di + dj + i + j)) {
+          continue;
+        }
+        const consecutive = [];
+        let ii = i,
+          jj = j;
+        while (columns[i][j] === (columns[ii] || [])[jj]) {
+          visited.add("" + di + dj + ii + jj);
+          consecutive.push([ii, jj]);
+          ii += di;
+          jj += dj;
+        }
+        if (consecutive.length >= 2) {
+          consecutives.push(consecutive);
         }
       }
     }
-    return consecutives
   }
-)
+  return consecutives;
+});
 
 export const countDisc = createSelector(
-  columns, 
-  compose(length, flatten)
-)
+  columns,
+  R.compose(R.length, R.flatten)
+);
 
-const isEven = 
-  pipe(modulo(__, 2), equals(0))
+const isEven = R.pipe(R.modulo(R.__, 2), R.equals(0));
 
 export const currentPlayer = createSelector(
-  countDisc, 
-  ifElse(isEven, always(Player.One), always(Player.Two))
-)
+  countDisc,
+  R.ifElse(isEven, R.always(Player.One), R.always(Player.Two))
+);
 
 export const winningConsecutives = createSelector(
-  consecutives, 
-  filter(compose(lte(WIN_COUNT), length))
-)
+  consecutives,
+  R.filter(R.compose(R.lte(WIN_COUNT), R.length))
+);
 
-const isNotEmpty = 
-  complement(isEmpty)
+const isNotEmpty = R.complement(R.isEmpty);
 
-export const isWin = createSelector(
-  winningConsecutives, 
-  isNotEmpty
-)
+export const isWin = createSelector(winningConsecutives, isNotEmpty);
 
-export const isNotWin = createSelector(
-  isWin, 
-  not
-)
+export const isNotWin = createSelector(isWin, R.not);
 
 export const isTie = createSelector(
-  countDisc, 
-  equals(COLUMN_COUNT * ROW_COUNT)
-)
+  countDisc,
+  R.equals(COLUMN_COUNT * ROW_COUNT)
+);
 
-export const isGameStart = createSelector(
-  countDisc, 
-  equals(0)
-)
+export const isGameStart = createSelector(countDisc, R.equals(0));
 
-export const isGameNotStart = createSelector(
-  isGameStart, 
-  not
-)
+export const isGameNotStart = createSelector(isGameStart, R.not);
 
-export const isGameOver = createSelector(
-  isWin, 
-  isTie, 
-  or
-)
+export const isGameOver = createSelector(isWin, isTie, R.or);
 
-export const isGameNotOver = createSelector(
-  isGameOver, 
-  not
-)
+export const isGameNotOver = createSelector(isGameOver, R.not);
 
-export const oppositePlayer =
-  ifElse(equals(Player.One), always(Player.Two), always(Player.One))
+export const oppositePlayer = R.ifElse(
+  R.equals(Player.One),
+  R.always(Player.Two),
+  R.always(Player.One)
+);
 
 export const winner = createSelector(
-  isWin, 
+  isWin,
   currentPlayer,
-  (isWin, currentPlayer) =>
-    isWin && oppositePlayer(currentPlayer)
-)
+  (isWin, currentPlayer) => isWin && oppositePlayer(currentPlayer)
+);
 
-export const loser = createSelector(
-  winner,
-  oppositePlayer
-)
+export const loser = createSelector(winner, oppositePlayer);
 
 export const isOpponentOffline = createSelector(
-  opponentType, 
-  equals(PlayerType.Offline)
-)
+  opponentType,
+  R.equals(PlayerType.Offline)
+);
 
 export const isOpponentOnline = createSelector(
-  opponentType, 
-  equals(PlayerType.Online)
-)
+  opponentType,
+  R.equals(PlayerType.Online)
+);
 
 const computerPlayerTypes = [
-  PlayerType.EasyComputer, 
-  PlayerType.MediumComputer, 
+  PlayerType.EasyComputer,
+  PlayerType.MediumComputer,
   PlayerType.HardComputer,
-]
+];
 
-export const isComputerPlayerType =
-  includes(__, computerPlayerTypes)
+export const isComputerPlayerType = R.includes(R.__, computerPlayerTypes);
 
 export const isOpponentComputer = createSelector(
-  opponentType, 
+  opponentType,
   isComputerPlayerType
-)
+);
 
 export const currentPlayerType = createSelector(
   currentPlayer,
@@ -204,34 +151,33 @@ export const currentPlayerType = createSelector(
   opponentType,
   (currentPlayer, offlinePlayer, opponentType) =>
     currentPlayer === offlinePlayer ? PlayerType.Offline : opponentType
-)
+);
 
 export const isTurnOffline = createSelector(
   currentPlayerType,
-  equals(PlayerType.Offline),
-)
+  R.equals(PlayerType.Offline)
+);
 
-export const isTurnNotOffline = createSelector(
-  isTurnOffline, 
-  not
-)
+export const isTurnNotOffline = createSelector(isTurnOffline, R.not);
 
 export const isTurnComputer = createSelector(
-  currentPlayerType, 
-  isComputerPlayerType,
-)
+  currentPlayerType,
+  isComputerPlayerType
+);
 
 export const isTurnOnline = createSelector(
-  currentPlayerType, 
-  equals(PlayerType.Online)
-)
+  currentPlayerType,
+  R.equals(PlayerType.Online)
+);
 
-export const isTurn = curry((playerType, state) =>
-    isGameNotOver(state) 
-  && currentPlayerType(state) === playerType)
+export const isTurn = R.curry(
+  (playerType, state) =>
+    isGameNotOver(state) && currentPlayerType(state) === playerType
+);
 
-export const isColumnFull = curry((columnIndex, state) =>
-  length(prop(columnIndex, columns(state))) >= ROW_COUNT)
+export const isColumnFull = R.curry(
+  (columnIndex, state) =>
+    R.length(R.prop(columnIndex, columns(state))) >= ROW_COUNT
+);
 
-export const isColumnNotFull = 
-  complement(isColumnFull)
+export const isColumnNotFull = R.complement(isColumnFull);

@@ -11,7 +11,7 @@ import {
   all,
   race,
   takeLatest,
-  delay
+  delay,
 } from "@redux-saga/core/effects";
 import { createActions } from "redux-actions";
 import { show, hide } from "redux-modal";
@@ -23,49 +23,49 @@ const { success, info, warning, error } = actions;
 
 const notifications = {
   CONNECTION: success({
-    message: "Server connected! 😊"
+    message: "Server connected! 😊",
   }),
   DISCONNECTION: error({
-    message: "Server disconnected 😑"
+    message: "Server disconnected 😑",
   }),
   ROOM_ENDED: error({
-    message: `Opponent lefted game 👋`
+    message: `Opponent lefted game 👋`,
   }),
   ENDED_ROOM: info({
-    message: `You lefted game 👋`
+    message: `You lefted game 👋`,
   }),
   STARTED_ROOM: info({
-    message: `You started a game. 🌐`
+    message: `You started a game. 🌐`,
   }),
   JOINED_ROOM: success({
-    message: `You joined someone's game! ⚔️`
+    message: `You joined someone's game! ⚔️`,
   }),
   ROOM_JOINED: success({
-    message: `Someone joined your game! ⚔️`
+    message: `Someone joined your game! ⚔️`,
   }),
   REMATCH: success({
-    message: `Rematch! ⚔️`
+    message: `Rematch! ⚔️`,
   }),
   opponentWantsRematch: info({
-    message: "Opponent wants a rematch! 🆚"
-  })
+    message: "Opponent wants a rematch! 🆚",
+  }),
 };
 
 function* notificationsSaga() {
-  yield takeEvery(keys(notifications), function*(action) {
+  yield takeEvery(keys(notifications), function* (action) {
     yield put(prop(action.type, notifications));
   });
 }
 
 function* joinRoomSaga(socket) {
-  yield takeLatest("JOIN_ROOM", function*() {
+  yield takeLatest("JOIN_ROOM", function* () {
     yield put(
       show(
         "joinRoom",
-        createActions({ CANCEL: undefined, SUBMIT: roomId => roomId })
+        createActions({ CANCEL: undefined, SUBMIT: (roomId) => roomId })
       )
     );
-    yield takeEvery("SUBMIT", function*({ payload: roomId }) {
+    yield takeEvery("SUBMIT", function* ({ payload: roomId }) {
       socket.emit("joinRoom", roomId);
     });
     yield take(["DISCONNECTION", "CANCEL", "JOINED_ROOM"]);
@@ -74,35 +74,35 @@ function* joinRoomSaga(socket) {
 }
 
 function* startRoomSaga(socket) {
-  yield takeLatest("START_ROOM", function*() {
+  yield takeLatest("START_ROOM", function* () {
     yield put(show("startRoom", createActions({ CANCEL: undefined })));
     socket.emit("startRoom");
     yield race([
       take(["DISCONNECTION", "ROOM_JOINED"]),
-      call(function*() {
+      call(function* () {
         yield take("CANCEL");
         socket.emit("leaveRoom");
-      })
+      }),
     ]);
     yield put(hide("startRoom"));
   });
 }
 
 function* leaveRoomSaga(socket) {
-  yield takeLatest("LEAVE_ROOM", function*() {
+  yield takeLatest("LEAVE_ROOM", function* () {
     socket.emit("leaveRoom");
   });
 }
 
 function* inGameSaga(socket) {
-  yield takeEvery(["DROP_DISC", "REQUEST_REMATCH"], function*(action) {
+  yield takeEvery(["DROP_DISC", "REQUEST_REMATCH"], function* (action) {
     socket.emit("socketAction", action);
   });
-  yield fork(function*() {
+  yield fork(function* () {
     while (true) {
       yield all([
         take("REQUEST_REMATCH"),
-        call(function*() {
+        call(function* () {
           while (true) {
             const { payload: socketAction } = yield take("SOCKET_ACTION");
             if (socketAction.type === "REQUEST_REMATCH") {
@@ -112,43 +112,25 @@ function* inGameSaga(socket) {
               break;
             }
           }
-        })
+        }),
       ]);
       yield put(actions.rematch());
     }
   });
 }
 
-const createSocketChannel = socket =>
-  eventChannel(emit => {
-    values(actions).forEach(action => {
-      socket.on(
-        action,
-        pipe(
-          action,
-          emit
-        )
-      );
+const createSocketChannel = (socket) =>
+  eventChannel((emit) => {
+    values(actions).forEach((action) => {
+      socket.on(action, pipe(action, emit));
     });
-    socket.on(
-      "connect",
-      pipe(
-        actions.connection,
-        emit
-      )
-    );
-    socket.on(
-      "disconnect",
-      pipe(
-        actions.disconnection,
-        emit
-      )
-    );
+    socket.on("connect", pipe(actions.connection, emit));
+    socket.on("disconnect", pipe(actions.disconnection, emit));
     return () => {};
   });
 
 function* readSocketSaga(socket) {
-  yield fork(function*() {
+  yield fork(function* () {
     const channel = yield call(createSocketChannel, socket);
     while (true) {
       const socketAction = yield take(channel);
@@ -159,7 +141,10 @@ function* readSocketSaga(socket) {
 
 const IS_IN_DEVELOPMENT_MODE =
   !process.env.NODE_ENV || process.env.NODE_ENV === "development";
-const socketURL = IS_IN_DEVELOPMENT_MODE ? "http://localhost:8080/" : "";
+
+const socketURL = IS_IN_DEVELOPMENT_MODE
+  ? "http://localhost:8080/"
+  : "https://connect-four-backend.herokuapp.com/";
 
 function* socketSaga() {
   const socket = io(socketURL);
