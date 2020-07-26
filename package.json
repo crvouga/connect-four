@@ -1,0 +1,19 @@
+{
+  "name": "connect-four",
+  "version": "1.0.0",
+  "description": "![icon](client/public/faviconTemplate.svg) # Connect Four An implementation of the game Connect Four. Features include an AI to play against and online multiplayer so you can play with your friends. The game uses React and Redux on the frontend and Socket.IO on the backend. ## Live site: https://vouga-connect-four.herokuapp.com/ ![](preview.gif)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/crvouga/connect-four.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/crvouga/connect-four/issues"
+  },
+  "homepage": "https://github.com/crvouga/connect-four#readme"
+}
