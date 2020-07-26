@@ -22,4 +22,4 @@ const Root = () => (
 
 ReactDOM.render(<Root />, document.getElementById("root"));
 
-registerServiceWorker();
+// registerServiceWorker();
