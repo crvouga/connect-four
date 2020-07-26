@@ -3,7 +3,7 @@ const express = require("express");
 const app = express();
 const http = require("http");
 const server = http.Server(app);
-const io = require("socket.io")(server);
+const io = require("socket.io")(server, { origins: "*:*" });
 
 // CORS
 //SOURCE: https://stackoverflow.com/questions/24058157/socket-io-node-js-cross-origin-request-blocked
