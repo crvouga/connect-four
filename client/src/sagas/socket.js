@@ -139,12 +139,12 @@ function* readSocketSaga(socket) {
   });
 }
 
-const IS_IN_DEVELOPMENT_MODE =
-  !process.env.NODE_ENV || process.env.NODE_ENV === "development";
+const NODE_ENV = process.env.NODE_ENV || "development";
 
-const socketURL = IS_IN_DEVELOPMENT_MODE
-  ? "http://localhost:9000/"
-  : "https://connect-four-backend.herokuapp.com/";
+const socketURL =
+  NODE_ENV === "development"
+    ? "http://localhost:9000"
+    : "https://connect-four-backend.herokuapp.com";
 
 function* socketSaga() {
   const socket = io(socketURL);

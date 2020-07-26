@@ -1,23 +1,18 @@
 const PORT = process.env.PORT || 9000;
-const env = process.env.NODE_ENV || "development";
+const NODE_ENV = process.env.NODE_ENV || "development";
 
 const express = require("express");
 const app = express();
 const server = app.listen(PORT, () => {
   console.log("listening on port ", PORT);
 });
-const clientOrigin = "https://connect-four-in-a-row.web.app/";
+
+//👮‍♂️ cors
+const clientOrigins = "https://connect-four-in-a-row.web.app" + ":*";
+const socketOrigins = NODE_ENV === "development" ? "*:*" : clientOrigins;
+
 const io = require("socket.io")(server, {
-  origins: "*:*",
-  handlePreflightRequest: (req, res) => {
-    const headers = {
-      "Access-Control-Allow-Headers": "Content-Type, Authorization",
-      "Access-Control-Allow-Credentials": true,
-      "Access-Control-Allow-Origin": req.headers.origin,
-    };
-    res.writeHead(200, headers);
-    res.end();
-  },
+  origins: socketOrigins,
 });
 
 const sockets = {};
