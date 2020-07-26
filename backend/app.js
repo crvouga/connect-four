@@ -4,6 +4,9 @@ const http = require("http");
 const server = http.Server(app);
 const socketio = require("socket.io");
 const io = socketio(server);
+const cors = require("cors");
+
+app.use(cors());
 
 const PORT = process.env.PORT || 8080;
 server.listen(PORT, () => {
