@@ -4,23 +4,23 @@ export const ENQUEUE_SNACKBAR = "ENQUEUE_SNACKBAR";
 export const CLOSE_SNACKBAR = "CLOSE_SNACKBAR";
 export const REMOVE_SNACKBAR = "REMOVE_SNACKBAR";
 
-export const enqueueSnackbar = notification => {
+export const enqueueSnackbar = (notification) => {
   const key = notification.options && notification.options.key;
   return {
     ...notification,
-    key: key || new Date().getTime() + Math.random()
+    key: key || new Date().getTime() + Math.random(),
   };
 };
 
-export const closeSnackbar = key => ({
+export const closeSnackbar = (key) => ({
   type: CLOSE_SNACKBAR,
   dismissAll: !key, // dismiss all if no key has been defined
-  key
+  key,
 });
 
-export const removeSnackbar = key => ({
+export const removeSnackbar = (key) => ({
   type: REMOVE_SNACKBAR,
-  key
+  key,
 });
 
 export default createActions({
@@ -28,7 +28,7 @@ export default createActions({
   DROP_DISC: (playerType, columnIndex) => ({ playerType, columnIndex }),
   RESTART_GAME: undefined,
   CHANGE_TEAM: undefined,
-  CHANGE_OPPONENT: playerType => ({ playerType }),
+  CHANGE_OPPONENT: (playerType) => ({ playerType }),
 
   /* Socket */
   REMATCH: undefined,
@@ -45,42 +45,43 @@ export default createActions({
   ENDED_ROOM: undefined,
   ROOM_ENDED: undefined,
   SOCKET_ACTION: undefined,
+  SOCKET_STATE: undefined,
 
   /* settings */
   TOGGLE_THEME: undefined,
   TOGGLE_CONFETTI: undefined,
-  
+
   /* notifications */
-  SUCCESS: payload =>
+  SUCCESS: (payload) =>
     enqueueSnackbar({
       ...payload,
       options: {
         key: new Date().getTime() + Math.random(),
-        variant: "success"
-      }
+        variant: "success",
+      },
     }),
-  INFO: payload =>
+  INFO: (payload) =>
     enqueueSnackbar({
       ...payload,
       options: {
         key: new Date().getTime() + Math.random(),
-        variant: "info"
-      }
+        variant: "info",
+      },
     }),
-  WARNING: payload =>
+  WARNING: (payload) =>
     enqueueSnackbar({
       ...payload,
       options: {
         key: new Date().getTime() + Math.random(),
-        variant: "warning"
-      }
+        variant: "warning",
+      },
     }),
-  ERROR: payload =>
+  ERROR: (payload) =>
     enqueueSnackbar({
       ...payload,
       options: {
         key: new Date().getTime() + Math.random(),
-        variant: "error"
-      }
-    })
+        variant: "error",
+      },
+    }),
 });

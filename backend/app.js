@@ -95,6 +95,12 @@ const socketActionHandler = (socket) => (clientReduxAction) => {
   });
 };
 
+const socketStateHandler = (socket) => (clientReduxState) => {
+  currentRoomIds(socket).forEach((roomId) => {
+    socket.broadcast.to(roomId).emit("SOCKET_STATE", clientReduxState);
+  });
+};
+
 const connectionHandler = (socket) => {
   sockets[socket.id] = socket.id;
   socket.on("disconnect", () => {
@@ -106,6 +112,7 @@ const connectionHandler = (socket) => {
   socket.on("leaveRoom", leaveRoomHandler(socket));
   socket.on("disconnecting", leaveRoomHandler(socket));
   socket.on("socketAction", socketActionHandler(socket));
+  socket.on("socketState", socketStateHandler(socket));
 };
 
 io.on("connection", connectionHandler);

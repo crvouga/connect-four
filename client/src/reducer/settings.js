@@ -1,16 +1,16 @@
-import { handleActions } from "redux-actions";
-import { evolve, prop, __, not } from "ramda";
 import actions from "../actions";
-
-export const reducer = handleActions(
-  {
-    [actions.toggleTheme]: evolve({
-      theme: prop(__, { light: "dark", dark: "light" }),
-    }),
-    [actions.toggleConfetti]: evolve({ isConfetti: not }),
-  },
+import { createReducer } from "@reduxjs/toolkit";
+export const reducer = createReducer(
   {
     theme: "dark",
     isConfetti: false,
+  },
+  {
+    [actions.toggleTheme]: (state) => {
+      state.theme = state.theme === "light" ? "dark" : "light";
+    },
+    [actions.toggleConfetti]: (state) => {
+      state.isConfetti = !state.isConfetti;
+    },
   }
 );

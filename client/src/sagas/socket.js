@@ -1,61 +1,22 @@
-import io from "socket.io-client";
-import { prop, pipe, values, keys, not } from "ramda";
-import { eventChannel } from "redux-saga";
 import {
-  fork,
-  takeEvery,
-  take,
-  put,
-  call,
-  select,
   all,
+  call,
+  fork,
+  put,
   race,
+  select,
+  take,
+  takeEvery,
   takeLatest,
-  delay,
 } from "@redux-saga/core/effects";
+import { not, pipe, values } from "ramda";
 import { createActions } from "redux-actions";
-import { show, hide } from "redux-modal";
-import * as selectors from "../selectors";
-
+import { hide, show } from "redux-modal";
+import { eventChannel } from "redux-saga";
+import io from "socket.io-client";
 import actions from "../actions";
-
-const { success, info, warning, error } = actions;
-
-const notifications = {
-  CONNECTION: success({
-    message: "Server connected! 😊",
-  }),
-  DISCONNECTION: error({
-    message: "Server disconnected 😑",
-  }),
-  ROOM_ENDED: error({
-    message: `Opponent lefted game 👋`,
-  }),
-  ENDED_ROOM: info({
-    message: `You lefted game 👋`,
-  }),
-  STARTED_ROOM: info({
-    message: `You started a game. 🌐`,
-  }),
-  JOINED_ROOM: success({
-    message: `You joined someone's game! ⚔️`,
-  }),
-  ROOM_JOINED: success({
-    message: `Someone joined your game! ⚔️`,
-  }),
-  REMATCH: success({
-    message: `Rematch! ⚔️`,
-  }),
-  opponentWantsRematch: info({
-    message: "Opponent wants a rematch! 🆚",
-  }),
-};
-
-function* notificationsSaga() {
-  yield takeEvery(keys(notifications), function* (action) {
-    yield put(prop(action.type, notifications));
-  });
-}
+import * as selectors from "../selectors";
+import notificationsSaga from "./notifications";
 
 function* joinRoomSaga(socket) {
   yield takeLatest("JOIN_ROOM", function* () {
@@ -89,14 +50,28 @@ function* startRoomSaga(socket) {
 }
 
 function* leaveRoomSaga(socket) {
-  yield takeLatest("LEAVE_ROOM", function* () {
+  yield takeLatest(["CONNECTION", "DISCONNECTION", "LEAVE_ROOM"], function* () {
     socket.emit("leaveRoom");
   });
 }
 
 function* inGameSaga(socket) {
+  yield takeEvery(["CONNECTION", "SOCKET_ACTION"], function* () {
+    const role = yield select((state) => state.game.role);
+    if (role === "host") {
+      const gameState = yield select((state) => state.game);
+      socket.emit("socketState", gameState);
+    }
+  });
+
   yield takeEvery(["DROP_DISC", "REQUEST_REMATCH"], function* (action) {
-    socket.emit("socketAction", action);
+    const role = yield select((state) => state.game.role);
+    if (role === "host") {
+      const gameState = yield select((state) => state.game);
+      socket.emit("socketState", gameState);
+    } else {
+      socket.emit("socketAction", action);
+    }
   });
   yield fork(function* () {
     while (true) {
@@ -107,7 +82,11 @@ function* inGameSaga(socket) {
             const { payload: socketAction } = yield take("SOCKET_ACTION");
             if (socketAction.type === "REQUEST_REMATCH") {
               if (not(yield select(selectors.isWaitingForRematch))) {
-                yield put(notifications.opponentWantsRematch);
+                yield put(
+                  actions.info({
+                    message: "Opponent wants a rematch! 🆚",
+                  })
+                );
               }
               break;
             }
