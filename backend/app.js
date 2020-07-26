@@ -2,9 +2,12 @@ const express = require("express");
 const app = express();
 const http = require("http");
 const server = http.Server(app);
+
+// CORS
 //SOURCE: https://stackoverflow.com/questions/24058157/socket-io-node-js-cross-origin-request-blocked
 const io = require("socket.io")(server, {
   handlePreflightRequest: (req, res) => {
+    console.log(req.headers);
     const headers = {
       "Access-Control-Allow-Headers": "Content-Type, Authorization",
       "Access-Control-Allow-Origin": req.headers.origin, //or the specific origin you want to give access to,
@@ -13,6 +16,24 @@ const io = require("socket.io")(server, {
     res.writeHead(200, headers);
     res.end();
   },
+});
+
+const env = process.env.NODE_ENV || "development";
+
+// CORS
+//SOURCE: https://stackoverflow.com/questions/24058157/socket-io-node-js-cross-origin-request-blocked
+io.origins((origin, callback) => {
+  if (env === "development") {
+    return callback(null, true);
+  }
+  const originHostname = new URL(origin).hostname;
+  const clientHostname = new URL("https://connect-four-in-a-row.web.app/")
+    .hostname;
+
+  if (originHostname === clientHostname) {
+    return callback(null, true);
+  }
+  return callback("origin not allowed", false);
 });
 
 const PORT = process.env.PORT || 8080;
