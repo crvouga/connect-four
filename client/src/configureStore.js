@@ -10,7 +10,7 @@ const sagaMiddleware = createSagaMiddleware();
 const persistConfig = {
   key: "root",
   storage,
-  blacklist: ["game"],
+  whitelist: [],
 };
 
 const persistedReducer = persistReducer(persistConfig, reducer);
