@@ -1,38 +1,36 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import CircularProgress from "@material-ui/core/CircularProgress";
+import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import Dialog from "@material-ui/core/Dialog";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import DialogContent from "@material-ui/core/DialogContent";
-import TextField from "@material-ui/core/TextField";
 import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import Divider from "@material-ui/core/Divider";
 import Grid from "@material-ui/core/Grid";
+import Link from "@material-ui/core/Link";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
-import ListSubheader from "@material-ui/core/ListSubheader";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import ComputerIcon from "@material-ui/icons/Computer";
-import PersonIcon from "@material-ui/icons/Person";
-import PublicIcon from "@material-ui/icons/Public";
-import Box from "@material-ui/core/Box";
-import Divider from "@material-ui/core/Divider";
-import GitHubIcon from "@material-ui/icons/GitHub";
-import LinkIcon from "@material-ui/icons/Link";
+import ListSubheader from "@material-ui/core/ListSubheader";
+import Slide from "@material-ui/core/Slide";
+import Switch from "@material-ui/core/Switch";
+import TextField from "@material-ui/core/TextField";
+import Zoom from "@material-ui/core/Zoom";
 import Brightness4Icon from "@material-ui/icons/Brightness4";
 import Brightness7Icon from "@material-ui/icons/Brightness7";
-import Link from "@material-ui/core/Link";
-import Switch from "@material-ui/core/Switch";
-import { not, isNil, prop, drop } from "ramda";
+import ComputerIcon from "@material-ui/icons/Computer";
+import GitHubIcon from "@material-ui/icons/GitHub";
+import PersonIcon from "@material-ui/icons/Person";
+import PublicIcon from "@material-ui/icons/Public";
+import { drop, isNil, not, prop } from "ramda";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { connectModal, hide, show } from "redux-modal";
-import * as selectors from "../selectors";
 import actions from "../actions";
 import { PlayerType } from "../constants";
-import Slide from "@material-ui/core/Slide";
-import Zoom from "@material-ui/core/Zoom";
-import { Typography } from "@material-ui/core";
+import * as selectors from "../selectors";
 
 const SlideRight = React.forwardRef((props, ref) => {
   return <Slide direction="right" ref={ref} {...props} />;
@@ -47,7 +45,7 @@ const ZoomIn = React.forwardRef((props, ref) => {
 });
 
 const JoinRoomDialog = connectModal({ name: "joinRoom", destroyOnHide: false })(
-  props => {
+  (props) => {
     const { show: isOpen, submit, cancel } = props;
     const dispatch = useDispatch();
     const [roomIdText, setRoomIdText] = useState("");
@@ -109,8 +107,8 @@ const JoinRoomDialog = connectModal({ name: "joinRoom", destroyOnHide: false })(
 
 const StartRoomDialog = connectModal({
   name: "startRoom",
-  destroyOnHide: false
-})(props => {
+  destroyOnHide: false,
+})((props) => {
   const { show: isOpen, cancel } = props;
   const roomId = useSelector(selectors.roomId);
   const dispatch = useDispatch();
@@ -141,8 +139,8 @@ const StartRoomDialog = connectModal({
 
 const LeaveRoomDialog = connectModal({
   name: "leaveRoom",
-  destroyOnHide: false
-})(props => {
+  destroyOnHide: false,
+})((props) => {
   const { show: isOpen, interceptedAction } = props;
   const dispatch = useDispatch();
   const handleLeave = () => {
@@ -167,7 +165,7 @@ const LeaveRoomDialog = connectModal({
 });
 
 const SettingsDialog = connectModal({ name: "settings", destroyOnHide: false })(
-  props => {
+  (props) => {
     const { show: isOpen } = props;
     const theme = useSelector(selectors.theme);
     const isConfetti = useSelector(selectors.isConfetti);
@@ -198,7 +196,6 @@ const SettingsDialog = connectModal({ name: "settings", destroyOnHide: false })(
             <ListItemText primary="Settings" />
           </ListSubheader>
 
-
           <ListItem button onClick={toggleConfetti}>
             <ListItemIcon>
               <Switch checked={isConfetti} />
@@ -208,7 +205,6 @@ const SettingsDialog = connectModal({ name: "settings", destroyOnHide: false })(
               secondary={isConfetti ? "Confetti On" : "Confetti Off"}
             />
           </ListItem>
-
 
           <ListItem button onClick={toggleTheme}>
             <ListItemIcon>
@@ -241,7 +237,7 @@ const SettingsDialog = connectModal({ name: "settings", destroyOnHide: false })(
 );
 
 const MenuDialog = connectModal({ name: "menu", destroyOnHide: false })(
-  props => {
+  (props) => {
     const { show: isOpen } = props;
     const isOpponentOnline = useSelector(selectors.isOpponentOnline);
     const isSocketNotConnected = useSelector(selectors.isSocketNotConnected);
@@ -249,7 +245,7 @@ const MenuDialog = connectModal({ name: "menu", destroyOnHide: false })(
     const onClose = () => {
       dispatch(hide("menu"));
     };
-    const guardedDispatch = action => {
+    const guardedDispatch = (action) => {
       onClose();
       if (isOpponentOnline) {
         dispatch(show("leaveRoom", { interceptedAction: action }));
@@ -258,7 +254,7 @@ const MenuDialog = connectModal({ name: "menu", destroyOnHide: false })(
       }
     };
 
-    const handleChangeOpponent = playerType => () => {
+    const handleChangeOpponent = (playerType) => () => {
       guardedDispatch(actions.changeOpponent(playerType));
     };
 

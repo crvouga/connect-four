@@ -23,7 +23,10 @@ function* joinRoomSaga(socket) {
     yield put(
       show(
         "joinRoom",
-        createActions({ CANCEL: undefined, SUBMIT: (roomId) => roomId })
+        createActions({
+          CANCEL: undefined,
+          SUBMIT: (roomId) => roomId,
+        })
       )
     );
     yield takeEvery("SUBMIT", function* ({ payload: roomId }) {
@@ -36,7 +39,14 @@ function* joinRoomSaga(socket) {
 
 function* startRoomSaga(socket) {
   yield takeLatest("START_ROOM", function* () {
-    yield put(show("startRoom", createActions({ CANCEL: undefined })));
+    yield put(
+      show(
+        "startRoom",
+        createActions({
+          CANCEL: undefined,
+        })
+      )
+    );
     socket.emit("startRoom");
     yield race([
       take(["DISCONNECTION", "ROOM_JOINED"]),
@@ -118,15 +128,8 @@ function* readSocketSaga(socket) {
   });
 }
 
-const NODE_ENV = process.env.NODE_ENV || "development";
-
-const socketURL =
-  NODE_ENV === "development"
-    ? "http://localhost:9000"
-    : "https://connect-four-backend.herokuapp.com";
-
 function* socketSaga() {
-  const socket = io(socketURL);
+  const socket = io();
   yield* readSocketSaga(socket);
   yield* notificationsSaga();
   yield* joinRoomSaga(socket);

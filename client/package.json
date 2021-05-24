@@ -1,4 +1,5 @@
 {
+  "proxy": "http://localhost:9000",
   "name": "connect-four-client",
   "version": "0.1.0",
   "private": true,
@@ -28,7 +29,6 @@
     "socket.io-client": "^2.3.0"
   },
   "scripts": {
-    "deploy": "npm run build && firebase deploy",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",

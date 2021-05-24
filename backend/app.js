@@ -1,24 +1,69 @@
+const express = require("express");
+const path = require("path");
+
 const PORT = process.env.PORT || 9000;
 const NODE_ENV = process.env.NODE_ENV || "development";
+const CLIENT_BUILD_PATH = path.join(
+  __dirname,
+  "..",
+  "client",
+  "build"
+);
 
-const express = require("express");
 const app = express();
-const server = app.listen(PORT, () => {
-  console.log("listening on port ", PORT);
+
+
+/**
+ *
+ *
+ *
+ * Client
+ *
+ *
+ *
+ * */
+
+app.use(express.static(CLIENT_BUILD_PATH, {
+  maxAge: "30d"
+}));
+
+app.get("*", (_req, res) => {
+  res.sendFile(path.join(CLIENT_BUILD_PATH, "index.html"));
 });
 
-//👮‍♂️ cors
-const clientOrigins = "https://connect-four-in-a-row.web.app" + ":*";
-const socketOrigins = NODE_ENV === "development" ? "*:*" : clientOrigins;
+
+
+/**
+ *
+ *
+ *
+ * Server
+ *
+ *
+ *
+ * */
+
+const server = app.listen(PORT, () => {
+  console.log(`server listening at http://localhost:${PORT}`);
+});
+
+/**
+ *
+ *
+ *
+ * CORS
+ *
+ *
+ *
+ * */
+
+const socketOrigins = NODE_ENV === "development" ? "*:*" : undefined;
 
 const io = require("socket.io")(server, {
   origins: socketOrigins,
 });
 
 const sockets = {};
-app.get("/", (req, res) => {
-  res.json({ message: "hello from backend", sockets });
-});
 
 /**
  *
@@ -56,13 +101,17 @@ const joinRoomHandler = (socket) => (roomId) => {
         socket.broadcast.to(roomId).emit("ROOM_JOINED");
       } else {
         const reason =
-          socketIds.length === 0
-            ? "Couldn't find game"
-            : socketIds.length > 1
-            ? "Game is full"
-            : "Unkown reason";
+          socketIds.length === 0 ?
+          "Couldn't find game" :
+          socketIds.length > 1 ?
+          "Game is full" :
+          "Unkown reason";
 
-        socket.emit("JOIN_ROOM_ERROR", { error, roomId, reason });
+        socket.emit("JOIN_ROOM_ERROR", {
+          error,
+          roomId,
+          reason
+        });
       }
     });
 };
