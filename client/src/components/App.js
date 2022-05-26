@@ -85,7 +85,7 @@ const App = () => {
           variantWarning: classes.warning,
           variantInfo: classes.info,
         }}
-        maxSnack={2}
+        maxSnack={1}
       >
         <Container maxWidth="xs" className={classes.root}>
           <Dialogs />
