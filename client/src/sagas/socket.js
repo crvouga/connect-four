@@ -14,6 +14,7 @@ import { createActions } from "redux-actions";
 import { hide, show } from "redux-modal";
 import { eventChannel } from "redux-saga";
 import io from "socket.io-client";
+import { env } from "../env";
 import actions from "../actions";
 import * as selectors from "../selectors";
 import notificationsSaga from "./notifications";
@@ -130,10 +131,8 @@ function* readSocketSaga(socket) {
   });
 }
 
-const baseUrl = "";
-
 function* socketSaga() {
-  const socket = io(baseUrl);
+  const socket = io(env.REACT_APP_BACKEND_BASE_URL);
   yield* readSocketSaga(socket);
   yield* notificationsSaga();
   yield* joinRoomSaga(socket);

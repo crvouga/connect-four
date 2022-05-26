@@ -1,5 +1,4 @@
 {
-  "proxy": "http://localhost:9000",
   "name": "connect-four-client",
   "version": "0.1.0",
   "private": true,
@@ -32,7 +31,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "vercel-env": "npx vercel pull"
   },
   "browserslist": {
     "production": [
