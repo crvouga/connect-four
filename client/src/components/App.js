@@ -1,9 +1,9 @@
+import { Box, Collapse, createTheme, Typography } from "@material-ui/core";
 import Container from "@material-ui/core/Container";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Grid from "@material-ui/core/Grid";
 import IconButton from "@material-ui/core/IconButton";
-import { ThemeProvider, useTheme } from "@material-ui/core/styles";
-import { createTheme } from "@material-ui/core";
+import { ThemeProvider } from "@material-ui/core/styles";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import FiberNewIcon from "@material-ui/icons/FiberNew";
 import SettingsIcon from "@material-ui/icons/Settings";
@@ -35,7 +35,6 @@ const darkTheme = createTheme({
 const useStyles = makeStyles((theme) => ({
   root: {
     userSelect: "none",
-    marginTop: theme.spacing(1),
     padding: 0,
   },
   success: {
@@ -50,6 +49,20 @@ const useStyles = makeStyles((theme) => ({
   info: {
     backgroundColor: theme.palette.info.main,
   },
+  pulse: {
+    animation: "$pulse 1s infinite ease",
+  },
+  "@keyframes pulse": {
+    "0%": {
+      opacity: 1,
+    },
+    "50%": {
+      opacity: 0.8,
+    },
+    "100%": {
+      opacity: 1,
+    },
+  },
 }));
 
 const App = () => {
@@ -59,8 +72,8 @@ const App = () => {
   const isConfetti = useSelector(selectors.isConfetti);
   const isWin = useSelector(selectors.isWin);
   const winner = useSelector(selectors.winner);
+  const isSocketConnected = useSelector(selectors.isSocketConnected);
 
-  const theme = useTheme();
   // const isSmallDevice = useMediaQuery(theme.breakpoints.down("sm"));
 
   const handleOpenMenu = () => {
@@ -71,8 +84,10 @@ const App = () => {
     dispatch(show("settings"));
   };
 
+  const theme = themeType === "light" ? lightTheme : darkTheme;
+
   return (
-    <ThemeProvider theme={themeType === "light" ? lightTheme : darkTheme}>
+    <ThemeProvider theme={theme}>
       <CssBaseline />
       <SnackbarProvider
         disableWindowBlurListener
@@ -88,6 +103,19 @@ const App = () => {
         maxSnack={1}
       >
         <Container maxWidth="xs" className={classes.root}>
+          <Collapse in={!isSocketConnected}>
+            <Box
+              className={classes.pulse}
+              width="100%"
+              paddingX={2}
+              paddingY={0.5}
+              bgcolor={theme.palette.info.main}
+            >
+              <Typography variant="subtitle1" align="center">
+                Connecting to multiplayer server...
+              </Typography>
+            </Box>
+          </Collapse>
           <Dialogs />
           <Notifier />
           <Grid container justify="space-between">

@@ -5,12 +5,12 @@ import actions from "../actions";
 const { success, info, error } = actions;
 
 const notifications = {
-  CONNECTION: success({
-    message: "Server connected! 😊",
+  CONNECTION: info({
+    message: "Multiplayer server connected",
   }),
-  DISCONNECTION: error({
-    message: "Server disconnected 😑",
-  }),
+  // DISCONNECTION: error({
+  //   message: "Server disconnected 😑",
+  // }),
   ROOM_ENDED: error({
     message: `Opponent lefted game 👋`,
   }),
