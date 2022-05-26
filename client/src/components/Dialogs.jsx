@@ -62,7 +62,7 @@ const JoinRoomDialog = connectModal({ name: "joinRoom", destroyOnHide: false })(
       if (roomIdText.length === maxLength) {
         dispatch(submit(roomIdText));
       }
-    }, [roomIdText]);
+    }, [roomIdText, dispatch, submit]);
 
     const handleChange = ({ target: { value: roomIdText } }) => {
       setRoomIdText(roomIdText);

@@ -2,7 +2,7 @@ import { put, takeEvery } from "@redux-saga/core/effects";
 import { keys, prop } from "ramda";
 import actions from "../actions";
 
-const { success, info, warning, error } = actions;
+const { success, info, error } = actions;
 
 const notifications = {
   CONNECTION: success({

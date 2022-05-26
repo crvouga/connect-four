@@ -1,18 +1,17 @@
-import AlphaBetaConstructor from "alphabeta";
 import {
-  race,
-  take,
-  select,
-  call,
-  put,
-  delay,
   all,
-  takeEvery
+  call,
+  delay,
+  put,
+  race,
+  select,
+  take,
 } from "@redux-saga/core/effects";
+import AlphaBetaConstructor from "alphabeta";
+import { path, prop } from "ramda";
+import actions from "../actions";
 import { PlayerType } from "../constants";
 import * as selectors from "../selectors";
-import actions from "../actions";
-import { prop, path } from "ramda";
 
 const scoreFunction = (state, callback) => {
   let score = 0;
@@ -27,7 +26,7 @@ const scoreFunction = (state, callback) => {
 
 const columnIndexes = [3, 4, 2, 5, 1, 6, 0];
 
-const generateMoves = state => {
+const generateMoves = (state) => {
   const successors = [];
   const nextPlayer = selectors.oppositePlayer(state.currentPlayer);
   for (const columnIndex of columnIndexes) {
@@ -48,7 +47,7 @@ const alphabeta = AlphaBetaConstructor({
   scoreFunction,
   generateMoves,
   checkWinConditions,
-  uniqueKey: JSON.stringify
+  uniqueKey: JSON.stringify,
 });
 
 function* computerDropDisc() {
@@ -59,18 +58,18 @@ function* computerDropDisc() {
     state: {
       columns,
       currentPlayer,
-      columnIndex: undefined
+      columnIndex: undefined,
     },
     depth: prop(opponentType, {
       [PlayerType.EasyComputer]: 3,
       [PlayerType.MediumComputer]: 4,
-      [PlayerType.HardComputer]: 5
-    })
+      [PlayerType.HardComputer]: 5,
+    }),
   };
   alphabeta.setup(alphabetaConfig);
   const [bestState] = yield all([
-    call(() => new Promise(resolve => alphabeta.allSteps(resolve))),
-    delay(1000 / 4)
+    call(() => new Promise((resolve) => alphabeta.allSteps(resolve))),
+    delay(1000 / 4),
   ]);
   yield put(actions.dropDisc(opponentType, bestState.columnIndex));
 }

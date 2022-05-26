@@ -31,6 +31,7 @@ function* joinRoomSaga(socket) {
     );
     yield takeEvery("SUBMIT", function* ({ payload: roomId }) {
       socket.emit("joinRoom", roomId);
+      yield;
     });
     yield take(["DISCONNECTION", "CANCEL", "JOINED_ROOM"]);
     yield put(hide("joinRoom"));
@@ -62,6 +63,7 @@ function* startRoomSaga(socket) {
 function* leaveRoomSaga(socket) {
   yield takeLatest(["CONNECTION", "DISCONNECTION", "LEAVE_ROOM"], function* () {
     socket.emit("leaveRoom");
+    yield;
   });
 }
 
@@ -128,8 +130,10 @@ function* readSocketSaga(socket) {
   });
 }
 
+const baseUrl = "";
+
 function* socketSaga() {
-  const socket = io();
+  const socket = io(baseUrl);
   yield* readSocketSaga(socket);
   yield* notificationsSaga();
   yield* joinRoomSaga(socket);

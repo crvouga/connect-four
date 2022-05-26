@@ -1,26 +1,14 @@
+import { has, propOr } from "ramda";
+import { fork, put, takeEvery } from "redux-saga/effects";
+import actions from "../actions";
+import { PlayerType } from "../constants";
 import computerSaga from "./computer";
 import socketSaga from "./socket";
-import {
-  fork,
-  takeEvery,
-  put
-} from "redux-saga/effects";
-import actions from "../actions";
-import {
-  PlayerType
-} from "../constants";
-import {
-  has,
-  propOr,
-  toLower
-} from "ramda";
 
 export default function* () {
   yield takeEvery("CHANGE_OPPONENT", function* (action) {
     const {
-      payload: {
-        playerType
-      }
+      payload: { playerType },
     } = action;
 
     const playerTypeEmoji = {
@@ -32,9 +20,11 @@ export default function* () {
     if (has(playerType, playerTypeEmoji)) {
       const emoji = propOr("", playerType, playerTypeEmoji);
       const message = `Opponent changed to ${playerType} ${emoji}`;
-      yield put(actions.info({
-        message
-      }));
+      yield put(
+        actions.info({
+          message,
+        })
+      );
     }
   });
 

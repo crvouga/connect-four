@@ -3,15 +3,14 @@ const path = require("path");
 
 const PORT = process.env.PORT || 9000;
 const NODE_ENV = process.env.NODE_ENV || "development";
-const CLIENT_BUILD_PATH = path.join(
-  __dirname,
-  "..",
-  "client",
-  "build"
-);
+// const CLIENT_BUILD_PATH = path.join(
+//   __dirname,
+//   "..",
+//   "client",
+//   "build"
+// );
 
 const app = express();
-
 
 /**
  *
@@ -23,15 +22,17 @@ const app = express();
  *
  * */
 
-app.use(express.static(CLIENT_BUILD_PATH, {
-  maxAge: "30d"
-}));
+// app.use(express.static(CLIENT_BUILD_PATH, {
+//   maxAge: "30d"
+// }));
+
+// app.get("*", (_req, res) => {
+//   res.sendFile(path.join(CLIENT_BUILD_PATH, "index.html"));
+// });
 
 app.get("*", (_req, res) => {
-  res.sendFile(path.join(CLIENT_BUILD_PATH, "index.html"));
+  res.json({ message: "Welcome to backend." });
 });
-
-
 
 /**
  *
@@ -101,16 +102,16 @@ const joinRoomHandler = (socket) => (roomId) => {
         socket.broadcast.to(roomId).emit("ROOM_JOINED");
       } else {
         const reason =
-          socketIds.length === 0 ?
-          "Couldn't find game" :
-          socketIds.length > 1 ?
-          "Game is full" :
-          "Unkown reason";
+          socketIds.length === 0
+            ? "Couldn't find game"
+            : socketIds.length > 1
+            ? "Game is full"
+            : "Unkown reason";
 
         socket.emit("JOIN_ROOM_ERROR", {
           error,
           roomId,
-          reason
+          reason,
         });
       }
     });

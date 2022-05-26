@@ -3,7 +3,7 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import Grid from "@material-ui/core/Grid";
 import IconButton from "@material-ui/core/IconButton";
 import { ThemeProvider, useTheme } from "@material-ui/core/styles";
-import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
+import { createTheme } from "@material-ui/core";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import FiberNewIcon from "@material-ui/icons/FiberNew";
 import SettingsIcon from "@material-ui/icons/Settings";
@@ -20,13 +20,13 @@ import Dialogs from "./Dialogs";
 import Feedback from "./Feedback";
 import Notifier from "./Notifier";
 
-const lightTheme = createMuiTheme({
+const lightTheme = createTheme({
   palette: {
     type: "light",
   },
 });
 
-const darkTheme = createMuiTheme({
+const darkTheme = createTheme({
   palette: {
     type: "dark",
   },
