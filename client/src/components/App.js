@@ -36,6 +36,11 @@ const useStyles = makeStyles((theme) => ({
   root: {
     userSelect: "none",
     padding: 0,
+    position: "fixed",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
   },
   success: {
     backgroundColor: theme.palette.success.main,
