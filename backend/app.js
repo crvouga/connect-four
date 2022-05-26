@@ -1,5 +1,5 @@
 const express = require("express");
-const path = require("path");
+// const path = require("path");
 
 const PORT = process.env.PORT || 9000;
 const NODE_ENV = process.env.NODE_ENV || "development";
@@ -58,7 +58,8 @@ const server = app.listen(PORT, () => {
  *
  * */
 
-const socketOrigins = NODE_ENV === "development" ? "*:*" : undefined;
+const socketOrigins = "*:*";
+// NODE_ENV === "development" ? "*:*" : undefined;
 
 const io = require("socket.io")(server, {
   origins: socketOrigins,
