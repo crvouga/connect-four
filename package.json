@@ -6,7 +6,7 @@
   "scripts": {
     "postinstall": "cd backend && yarn",
     "start": "cd backend && yarn start",
-    "dev": "concurrently \"cd backend && yarn dev\" \"cd client && yarn start\"",
+    "dev": "concurrently \"cd backend && yarn dev\" \"cd client && yarn start\" \"cd client && PORT=3001 yarn start\"",
     "heroku-postbuild": "echo nothing",
     "heroku-local": "yarn heroku-write-env && yarn && yarn heroku-postbuild && heroku local",
     "heroku-write-env": "heroku config -s -a crvouga-connect-four > .env",
