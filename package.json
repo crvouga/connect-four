@@ -1,18 +1,13 @@
 {
   "name": "connect-four",
   "version": "1.0.0",
-  "description": "![icon](client/public/faviconTemplate.svg) # Connect Four An implementation of the game Connect Four. Features include an AI to play against and online multiplayer so you can play with your friends. The game uses React and Redux on the frontend and Socket.IO on the backend. ## Live site: https://vouga-connect-four.herokuapp.com/ ![](preview.gif)",
+  "description": "![icon](client/public/faviconTemplate.svg) # Connect Four An implementation of the game Connect Four. Features include an AI to play against and online multiplayer so you can play with your friends. The game uses React and Redux on the client and Socket.IO on the server. ## Live site: https://vouga-connect-four.herokuapp.com/ ![](preview.gif)",
   "main": "index.js",
   "scripts": {
-    "postinstall": "cd backend && yarn",
-    "start": "cd backend && yarn start",
-    "dev": "concurrently \"cd backend && yarn dev\" \"cd client && yarn start\" \"cd client && PORT=3001 yarn start\"",
-    "heroku-postbuild": "echo nothing",
-    "heroku-local": "yarn heroku-write-env && yarn && yarn heroku-postbuild && heroku local",
-    "heroku-write-env": "heroku config -s -a crvouga-connect-four > .env",
-    "heroku-logs": "heroku logs --tail --app  crvouga-connect-four",
-    "heroku-git-remote": "npx heroku git:remote -a crvouga-connect-four",
-    "heroku-deploy": "git push heroku master"
+    "postinstall": "cd server && yarn && cd ../client && yarn",
+    "start": "cd server && yarn start",
+    "dev": "concurrently \"cd server && yarn dev\" \"cd client && yarn start\" \"cd client && PORT=3001 yarn start\"",
+    "build": "cd client && yarn build"
   },
   "repository": {
     "type": "git",

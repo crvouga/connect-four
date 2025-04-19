@@ -17,7 +17,6 @@
     "react-notification-system": "^0.3.0",
     "react-notification-system-redux": "^2.0.0",
     "react-redux": "^7.1.3",
-    "react-scripts": "^3.4.0",
     "redux": "^4.0.4",
     "redux-actions": "^2.6.5",
     "redux-logger": "^3.0.6",
@@ -28,10 +27,10 @@
     "socket.io-client": "^2.3.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject",
+    "start": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest",
     "vercel-env": "npx vercel pull"
   },
   "browserslist": {
@@ -47,6 +46,9 @@
     ]
   },
   "devDependencies": {
-    "redux-devtools": "^3.5.0"
+    "@vitejs/plugin-react": "^4.4.1",
+    "redux-devtools": "^3.5.0",
+    "vite": "^5.4.18",
+    "vitest": "^1.2.2"
   }
 }
