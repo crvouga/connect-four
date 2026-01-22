@@ -7,7 +7,8 @@
     "postinstall": "cd server && yarn && cd ../client && yarn",
     "start": "cd server && yarn start",
     "dev": "concurrently \"cd server && yarn dev\" \"cd client && yarn start\" \"cd client && PORT=3001 yarn start\"",
-    "build": "cd client && yarn build"
+    "build": "cd client && yarn build",
+    "docker:preview": "docker build -t crvouga/connect-four:latest . && docker run --rm -p 8009:80 crvouga/connect-four:latest"
   },
   "repository": {
     "type": "git",
