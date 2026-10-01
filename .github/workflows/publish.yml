@@ -1,0 +1,28 @@
+# Managed by OpenTofu github_repository_file.
+name: Publish image
+
+on:
+  push:
+    branches:
+      - master
+
+permissions:
+  contents: read
+  packages: write
+  id-token: write
+  pull-requests: read
+
+jobs:
+  connect_four:
+    uses: crvouga/workspace/.github/workflows/ci.yml@main
+    secrets:
+      DEPLOY_DISPATCH_TOKEN: ${{ secrets.DEPLOY_DISPATCH_TOKEN }}
+      CALLER_GITHUB_TOKEN: ${{ github.token }}
+    with:
+      service_id: connect-four
+      dockerfile: ./Dockerfile
+      context: .
+      image_owner: crvouga
+      image_prefix: chrisvouga
+      infra_github_repo: crvouga/workspace
+
