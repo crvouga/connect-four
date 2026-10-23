@@ -9,12 +9,10 @@ on:
 permissions:
   contents: read
   packages: write
-  id-token: write
-  pull-requests: read
 
 jobs:
   connect_four:
-    uses: crvouga/workspace/.github/workflows/ci.yml@main
+    uses: crvouga/workspace/.github/workflows/publish.yml@main
     secrets:
       DEPLOY_DISPATCH_TOKEN: ${{ secrets.DEPLOY_DISPATCH_TOKEN }}
       CALLER_GITHUB_TOKEN: ${{ github.token }}
