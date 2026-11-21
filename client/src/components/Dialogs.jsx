@@ -219,7 +219,7 @@ const SettingsDialog = connectModal({ name: "settings", destroyOnHide: false })(
           <Divider />
 
           <Link
-            href="https://github.com/crvouga/connect-four"
+            href="https://github.com/crvouga-organization/connect-four"
             underline="none"
             color="inherit"
           >

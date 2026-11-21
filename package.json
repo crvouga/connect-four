@@ -12,14 +12,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/crvouga/connect-four.git"
+    "url": "git+https://github.com/crvouga-organization/connect-four.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/crvouga/connect-four/issues"
+    "url": "https://github.com/crvouga-organization/connect-four/issues"
   },
-  "homepage": "https://github.com/crvouga/connect-four#readme",
+  "homepage": "https://github.com/crvouga-organization/connect-four#readme",
   "devDependencies": {
     "concurrently": "^6.2.0",
     "heroku": "^7.60.2"
