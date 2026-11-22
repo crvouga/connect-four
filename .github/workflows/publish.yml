@@ -10,6 +10,12 @@ permissions:
   contents: read
   packages: write
 
+# Queue publishes per branch instead of running them in parallel; never cancel
+# an in-flight publish so a deploy dispatch is not cut off halfway.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   connect_four:
     uses: crvouga-organization/personal/.github/workflows/publish.yml@main
